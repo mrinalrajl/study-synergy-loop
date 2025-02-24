@@ -71,3 +71,14 @@ We don't support custom domains (yet). If you want to deploy your project under 
 
 ## This is a just sample with the LoveableAI
 This can be modified and then used again depending upon the need of the user based on the requirement and the prompt to create a new application and to maintain overall system.
+
+
+## Login Cred  
+```sh
+Email:- abc@gmail.com
+password:- abc@gmail.com
+```
+
+
+## Creating a RAG Bot for User
+This bot will help user to create a course suggestion and tries to encourage you with your learning
