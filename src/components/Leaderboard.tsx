@@ -1,5 +1,5 @@
 
-import { Trophy, Medal, Award } from "lucide-react";
+import { Trophy, Medal, Award, Star } from "lucide-react";
 import { useState } from "react";
 
 interface User {
