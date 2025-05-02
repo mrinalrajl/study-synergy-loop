@@ -1,14 +1,111 @@
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+// Predefined suggestions for different topics
+const TOPIC_SUGGESTIONS: Record<string, string[]> = {
+  "javascript": [
+    "JavaScript Fundamentals",
+    "Advanced JS Concepts",
+    "JavaScript Frameworks Comparison",
+    "Functional Programming in JS"
+  ],
+  "react": [
+    "React Hooks Deep Dive",
+    "State Management in React",
+    "React Performance Optimization",
+    "Building React Components"
+  ],
+  "python": [
+    "Python for Beginners",
+    "Data Science with Python",
+    "Machine Learning with Python",
+    "Web Development with Django"
+  ],
+  "design": [
+    "UI/UX Fundamentals",
+    "Design Systems",
+    "Responsive Design Patterns",
+    "Color Theory for Digital Designers"
+  ],
+  "data": [
+    "SQL Fundamentals",
+    "Data Analysis Techniques",
+    "Data Visualization Tools",
+    "Big Data Processing"
+  ],
+  "machine learning": [
+    "ML Fundamentals",
+    "Neural Networks",
+    "Natural Language Processing",
+    "Computer Vision"
+  ]
+};
+
+// Generic suggestions when no specific match is found
+const DEFAULT_SUGGESTIONS = [
+  "Course recommendations for beginners",
+  "Advanced learning paths",
+  "Most popular tech courses",
+  "Career transition guidance"
+];
 
 export const CourseChat = () => {
   const [message, setMessage] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [messages, setMessages] = useState<{ role: "user" | "assistant", content: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestionsRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Handle input change and generate suggestions
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setMessage(value);
+    
+    if (value.length > 2) {
+      const matchedSuggestions: string[] = [];
+      
+      // Look for topic matches
+      Object.entries(TOPIC_SUGGESTIONS).forEach(([topic, topicSuggestions]) => {
+        if (value.toLowerCase().includes(topic)) {
+          matchedSuggestions.push(...topicSuggestions);
+        }
+      });
+      
+      // If we found matches, use them; otherwise, use default suggestions
+      setSuggestions(matchedSuggestions.length > 0 ? matchedSuggestions : DEFAULT_SUGGESTIONS);
+      setShowSuggestions(true);
+    } else {
+      setShowSuggestions(false);
+    }
+  };
+
+  // Handle clicking outside suggestions to close them
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node) &&
+          inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    }
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  // Apply a suggestion to the input
+  const applySuggestion = (suggestion: string) => {
+    setMessage(suggestion);
+    setShowSuggestions(false);
+    inputRef.current?.focus();
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,6 +123,7 @@ export const CourseChat = () => {
     setMessages(prev => [...prev, userMessage]);
     setMessage("");
     setIsLoading(true);
+    setShowSuggestions(false);
 
     try {
       const response = await fetch('https://api.perplexity.ai/chat/completions', {
@@ -123,21 +221,54 @@ export const CourseChat = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="p-4 border-t border-border">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ask about courses or learning goals..."
-            className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover disabled:opacity-50"
-          >
-            <Send className="w-5 h-5" />
-          </button>
+        <div className="flex flex-col gap-2">
+          <div className="relative w-full">
+            <input
+              ref={inputRef}
+              type="text"
+              value={message}
+              onChange={handleInputChange}
+              placeholder="Ask about courses or learning goals..."
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              onFocus={() => message.length > 2 && setShowSuggestions(true)}
+            />
+            
+            {showSuggestions && (
+              <div 
+                ref={suggestionsRef}
+                className="absolute bottom-full mb-1 w-full bg-background border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto z-10"
+              >
+                {suggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className="p-2 hover:bg-accent cursor-pointer text-left text-sm border-b last:border-b-0 border-border"
+                    onClick={() => applySuggestion(suggestion)}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={message}
+              onChange={handleInputChange}
+              placeholder="Ask about courses or learning goals..."
+              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              onFocus={() => message.length > 2 && setShowSuggestions(true)}
+              hidden
+            />
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover disabled:opacity-50"
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          </div>
         </div>
       </form>
     </div>
