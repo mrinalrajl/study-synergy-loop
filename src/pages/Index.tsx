@@ -2,6 +2,7 @@
 import { LearningPath } from "@/components/LearningPath";
 import { Leaderboard } from "@/components/Leaderboard";
 import { CourseChat } from "@/components/CourseChat";
+import { PersonalizedLearning } from "@/components/PersonalizedLearning";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, LogOut, Search, Star, BookUser, Bell } from "lucide-react";
@@ -49,6 +50,7 @@ const FEATURED_COURSES = [
 const Index = () => {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [showPersonalized, setShowPersonalized] = useState(false);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -88,8 +90,9 @@ const Index = () => {
               <Button 
                 className="bg-primary hover:bg-primary-hover text-primary-foreground px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 hidden sm:flex"
                 title="Begin your learning journey"
+                onClick={() => setShowPersonalized(!showPersonalized)}
               >
-                Start Learning
+                {showPersonalized ? "Browse Courses" : "Personalize Learning"}
               </Button>
               <button
                 onClick={logout}
@@ -119,58 +122,68 @@ const Index = () => {
       </div>
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Featured Courses Section */}
-        <div className="mb-12">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Featured Courses</h2>
-            <Button variant="outline" className="text-sm border-primary/20 hover:bg-background/60">
-              View All
-            </Button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {FEATURED_COURSES.map((course, index) => (
-              <Card 
-                key={index} 
-                className="overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/40 bg-background/50 backdrop-blur-sm border-primary/10"
-              >
-                <div className="h-36 overflow-hidden">
-                  <img 
-                    src={course.image} 
-                    alt={course.title} 
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
-                  />
-                </div>
-                <CardHeader className="p-4 pb-0">
-                  <div className="text-xs text-primary font-medium mb-1">{course.category}</div>
-                  <CardTitle className="text-lg">{course.title}</CardTitle>
-                  <CardDescription className="text-sm">{course.instructor}</CardDescription>
-                </CardHeader>
-                <CardContent className="p-4">
-                  <div className="flex items-center text-sm">
-                    <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
-                    <span className="font-medium">{course.rating}</span>
-                    <span className="text-muted-foreground ml-2">({course.students.toLocaleString()} students)</span>
-                  </div>
-                </CardContent>
-                <CardFooter className="p-4 pt-0">
-                  <Button className="w-full" variant="secondary">
-                    Enroll Now
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <LearningPath />
-          </div>
-          <div>
-            <Leaderboard />
-          </div>
-        </div>
+        {showPersonalized ? (
+          <PersonalizedLearning />
+        ) : (
+          <>
+            {/* Featured Courses Section */}
+            <div className="mb-12">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold">Featured Courses</h2>
+                <Button 
+                  variant="outline" 
+                  className="text-sm border-primary/20 hover:bg-background/60"
+                  onClick={() => setShowPersonalized(true)}
+                >
+                  Personalize Learning
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {FEATURED_COURSES.map((course, index) => (
+                  <Card 
+                    key={index} 
+                    className="overflow-hidden transition-all duration-300 hover:shadow-lg hover:border-primary/40 bg-background/50 backdrop-blur-sm border-primary/10 glass-container"
+                  >
+                    <div className="h-36 overflow-hidden">
+                      <img 
+                        src={course.image} 
+                        alt={course.title} 
+                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-110" 
+                      />
+                    </div>
+                    <CardHeader className="p-4 pb-0">
+                      <div className="text-xs text-primary font-medium mb-1">{course.category}</div>
+                      <CardTitle className="text-lg">{course.title}</CardTitle>
+                      <CardDescription className="text-sm">{course.instructor}</CardDescription>
+                    </CardHeader>
+                    <CardContent className="p-4">
+                      <div className="flex items-center text-sm">
+                        <Star className="h-4 w-4 text-yellow-500 fill-yellow-500 mr-1" />
+                        <span className="font-medium">{course.rating}</span>
+                        <span className="text-muted-foreground ml-2">({course.students.toLocaleString()} students)</span>
+                      </div>
+                    </CardContent>
+                    <CardFooter className="p-4 pt-0">
+                      <Button className="w-full" variant="secondary">
+                        Enroll Now
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <LearningPath />
+              </div>
+              <div>
+                <Leaderboard />
+              </div>
+            </div>
+          </>
+        )}
       </main>
       
       <CourseChat />

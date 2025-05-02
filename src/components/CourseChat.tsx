@@ -1,120 +1,26 @@
+
 import { useState, useEffect, useRef } from "react";
-import { BookOpen, Send, X, ChevronDown, ChevronUp, BookUser, Search } from "lucide-react";
+import { BookOpen, Send, ChevronDown, ChevronUp, BookUser, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-
-// Course categories by field
-const COURSE_CATEGORIES = {
-  "AI & Machine Learning": [
-    { title: "Introduction to Machine Learning", description: "Learn the fundamentals of ML algorithms and applications", level: "Beginner" },
-    { title: "Deep Learning Specialization", description: "Master neural networks and deep learning techniques", level: "Intermediate" },
-    { title: "Generative AI with LLMs", description: "Build and fine-tune large language models", level: "Advanced" },
-    { title: "Computer Vision with PyTorch", description: "Image processing and object detection techniques", level: "Intermediate" }
-  ],
-  "Finance & Business": [
-    { title: "Financial Markets", description: "Understanding stocks, bonds, and investment strategies", level: "Beginner" },
-    { title: "Blockchain & Cryptocurrency", description: "Explore decentralized finance technologies", level: "Intermediate" },
-    { title: "Financial Analysis & Modeling", description: "Build predictive financial models with Excel and Python", level: "Advanced" },
-    { title: "Investment Management", description: "Portfolio optimization and risk assessment techniques", level: "Intermediate" }
-  ],
-  "Software Development": [
-    { title: "Full-Stack Web Development", description: "Build responsive web applications with modern frameworks", level: "Intermediate" },
-    { title: "Mobile App Development", description: "Create cross-platform mobile applications", level: "Intermediate" },
-    { title: "Cloud Computing & DevOps", description: "Infrastructure automation and deployment pipelines", level: "Advanced" },
-    { title: "Software Architecture", description: "Design scalable and maintainable software systems", level: "Advanced" }
-  ],
-  "Engineering & Design": [
-    { title: "Electrical Engineering Fundamentals", description: "Circuit analysis, electronics, and power systems", level: "Beginner" },
-    { title: "Mechanical Design & Simulation", description: "3D modeling and finite element analysis", level: "Intermediate" },
-    { title: "Architectural Visualization", description: "Create photorealistic architectural renders", level: "Intermediate" },
-    { title: "Sustainable Engineering Practices", description: "Environmentally conscious design and analysis", level: "Advanced" }
-  ]
-};
-
-// Predefined suggestions for different topics
-const TOPIC_SUGGESTIONS: Record<string, string[]> = {
-  "javascript": [
-    "JavaScript Fundamentals",
-    "Advanced JS Concepts",
-    "JavaScript Frameworks Comparison",
-    "Functional Programming in JS"
-  ],
-  "machine learning": [
-    "ML Fundamentals",
-    "Neural Networks",
-    "Natural Language Processing",
-    "Computer Vision"
-  ],
-  "python": [
-    "Python for Beginners",
-    "Data Science with Python",
-    "Machine Learning with Python",
-    "Web Development with Django"
-  ],
-  "design": [
-    "UI/UX Fundamentals",
-    "Design Systems",
-    "Responsive Design Patterns",
-    "Color Theory for Digital Designers"
-  ],
-  "finance": [
-    "Investment Strategies",
-    "Financial Planning",
-    "Stock Market Analysis",
-    "Personal Finance Management"
-  ],
-  "engineering": [
-    "Electrical Circuit Analysis",
-    "Mechanical Design Principles",
-    "Civil Engineering Fundamentals",
-    "Engineering Ethics"
-  ]
-};
-
-// Generic suggestions when no specific match is found
-const DEFAULT_SUGGESTIONS = [
-  "Course recommendations for beginners",
-  "Advanced learning paths",
-  "Most popular tech courses",
-  "Career transition guidance"
-];
-
-// Learning levels for users to select
-const LEARNING_LEVELS = [
-  "Beginner",
-  "Intermediate",
-  "Advanced",
-  "Expert"
-];
-
-// Learning goals templates
-const LEARNING_GOALS = [
-  "Get a job in tech",
-  "Improve current skills",
-  "Change career paths",
-  "Launch a project/startup",
-  "Academic research",
-  "Personal interest"
-];
+import { ChatSuggestions } from "@/components/ChatSuggestions";
+import { CourseRecommendations } from "@/components/CourseRecommendations";
+import { LEARNING_LEVELS, LEARNING_GOALS } from "@/utils/courseData";
 
 export const CourseChat = () => {
   const [message, setMessage] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [messages, setMessages] = useState<{ role: "user" | "assistant", content: string }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [learningLevel, setLearningLevel] = useState("");
   const [learningGoal, setLearningGoal] = useState("");
   const [isMinimized, setIsMinimized] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [showCourses, setShowCourses] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>("AI & Machine Learning");
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -122,23 +28,12 @@ export const CourseChat = () => {
   // Define the Gemini API key - hardcoded for demo purposes
   const geminiApiKey = "AIzaSyCM8RqXyQgJfH7hu3gW1vjRW0xv8LmZ598"; // This is a demo key, replace with actual key
 
-  // Handle input change and generate suggestions
+  // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setMessage(value);
     
     if (value.length > 2) {
-      const matchedSuggestions: string[] = [];
-      
-      // Look for topic matches
-      Object.entries(TOPIC_SUGGESTIONS).forEach(([topic, topicSuggestions]) => {
-        if (value.toLowerCase().includes(topic)) {
-          matchedSuggestions.push(...topicSuggestions);
-        }
-      });
-      
-      // If we found matches, use them; otherwise, use default suggestions
-      setSuggestions(matchedSuggestions.length > 0 ? matchedSuggestions : DEFAULT_SUGGESTIONS);
       setShowSuggestions(true);
     } else {
       setShowSuggestions(false);
@@ -185,9 +80,6 @@ export const CourseChat = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
-    
-    // We'll use a hardcoded API key for this demo
-    const geminiApiKey = "AIzaSyCM8RqXyQgJfH7hu3gW1vjRW0xv8LmZ598"; // This is a demo key, replace with your actual key
     
     const userMessage = { role: "user" as const, content: message };
     setMessages(prev => [...prev, userMessage]);
@@ -430,37 +322,7 @@ export const CourseChat = () => {
 
             {showCourses && (
               <div className="w-full mt-4 border border-border rounded-lg p-4 bg-background/30 animate-fade-in">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {Object.keys(COURSE_CATEGORIES).map(category => (
-                    <Button
-                      key={category}
-                      variant={selectedCategory === category ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setSelectedCategory(category)}
-                      className="glass-btn text-xs"
-                    >
-                      {category}
-                    </Button>
-                  ))}
-                </div>
-                
-                <div className="space-y-3 max-h-48 overflow-y-auto">
-                  {COURSE_CATEGORIES[selectedCategory].map((course, index) => (
-                    <div 
-                      key={index} 
-                      className="p-2 bg-background/40 rounded border border-border hover:border-primary/50 cursor-pointer transition-all duration-200 hover:bg-background/60"
-                      onClick={() => selectCourse(course.title)}
-                    >
-                      <div className="font-medium text-sm">{course.title}</div>
-                      <div className="text-xs text-muted-foreground">{course.description}</div>
-                      <div className="text-xs mt-1">
-                        <span className="px-2 py-0.5 bg-primary/20 text-primary rounded-full">
-                          {course.level}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                <CourseRecommendations onCourseSelect={selectCourse} />
               </div>
             )}
           </div>
@@ -529,19 +391,11 @@ export const CourseChat = () => {
             </Button>
             
             {showSuggestions && (
-              <div 
-                ref={suggestionsRef}
-                className="absolute bottom-full mb-1 w-full bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto z-10"
-              >
-                {suggestions.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className="p-2 hover:bg-background/60 cursor-pointer text-left text-sm border-b last:border-b-0 border-border"
-                    onClick={() => applySuggestion(suggestion)}
-                  >
-                    {suggestion}
-                  </div>
-                ))}
+              <div ref={suggestionsRef}>
+                <ChatSuggestions 
+                  message={message} 
+                  onSelectSuggestion={applySuggestion} 
+                />
               </div>
             )}
           </div>
