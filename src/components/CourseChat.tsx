@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { BookOpen, Send, X, ChevronDown, ChevronUp, BookUser, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -119,6 +118,9 @@ export const CourseChat = () => {
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+
+  // Define the Gemini API key - hardcoded for demo purposes
+  const geminiApiKey = "AIzaSyCM8RqXyQgJfH7hu3gW1vjRW0xv8LmZ598"; // This is a demo key, replace with actual key
 
   // Handle input change and generate suggestions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
