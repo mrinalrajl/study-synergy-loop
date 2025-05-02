@@ -1,6 +1,5 @@
-
 import { useState } from "react";
-import { Search, Star } from "lucide-react";
+import { Search, Star, BookUser } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { COURSE_CATEGORIES, LATEST_COURSES } from "@/utils/courseData";
@@ -19,14 +18,25 @@ interface CourseRecommendationsProps {
 export const CourseRecommendations = ({ onCourseSelect }: CourseRecommendationsProps) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("AI & Machine Learning");
   const [showLatest, setShowLatest] = useState<boolean>(false);
+  const [isAIRecommended, setIsAIRecommended] = useState<boolean>(false);
   const { toast } = useToast();
   
   const handleCourseClick = (course: string) => {
     onCourseSelect(course);
     toast({
       title: "Course selected",
-      description: `You selected "${course}"`,
+      description: `You selected "${course}". Ask for personalized learning path.`,
     });
+  };
+  
+  const toggleAIRecommendations = () => {
+    setIsAIRecommended(!isAIRecommended);
+    if (!isAIRecommended) {
+      toast({
+        title: "AI Recommendations Enabled",
+        description: "Recommendations will be personalized using Gemini AI",
+      });
+    }
   };
   
   return (
@@ -36,29 +46,42 @@ export const CourseRecommendations = ({ onCourseSelect }: CourseRecommendationsP
           <Search className="h-4 w-4 text-primary mr-2" />
           <h3 className="text-base font-medium">Course Recommendations</h3>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowLatest(!showLatest)}
-          className="text-xs glass-btn"
-        >
-          {showLatest ? "All Courses" : "Latest Additions"}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleAIRecommendations}
+            className="text-xs glass-btn"
+          >
+            <BookUser className="h-4 w-4 mr-1" />
+            {isAIRecommended ? "Standard View" : "AI Recommendations"}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowLatest(!showLatest)}
+            className="text-xs glass-btn"
+          >
+            {showLatest ? "All Courses" : "Latest Additions"}
+          </Button>
+        </div>
       </div>
       
-      <div className="flex flex-wrap gap-2 mb-4">
-        {Object.keys(COURSE_CATEGORIES).map((category) => (
-          <Button
-            key={category}
-            variant={selectedCategory === category ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedCategory(category)}
-            className="glass-btn text-xs"
-          >
-            {category}
-          </Button>
-        ))}
-      </div>
+      {!isAIRecommended && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {Object.keys(COURSE_CATEGORIES).map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedCategory(category)}
+              className="glass-btn text-xs"
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
+      )}
       
       <div className="space-y-3 max-h-48 overflow-y-auto">
         {(showLatest ? LATEST_COURSES[selectedCategory as keyof typeof LATEST_COURSES] : COURSE_CATEGORIES[selectedCategory]).map((course: CourseType, index: number) => (

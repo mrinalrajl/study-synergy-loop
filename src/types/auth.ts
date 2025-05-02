@@ -1,4 +1,3 @@
-
 export interface User {
   id: string;
   email: string;
@@ -12,7 +11,9 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => void;
-  signup: (email: string, name: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, name: string, password: string) => Promise<void>;
   logout: () => void;
+  updateProgress: (moduleId: number, progress: number, completed: boolean) => void;
+  isAuthenticating: boolean;
 }

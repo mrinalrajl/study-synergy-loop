@@ -1,9 +1,9 @@
-
 import { LearningPath } from "@/components/LearningPath";
 import { Leaderboard } from "@/components/Leaderboard";
 import { CourseChat } from "@/components/CourseChat";
 import { PersonalizedLearning } from "@/components/PersonalizedLearning";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { GlobalTour } from "@/components/GlobalTour";
 import { useAuth } from "@/contexts/AuthContext";
 import { BookOpen, LogOut, Search, Star, BookUser, Bell } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,10 +57,10 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen w-full bg-background">
       {/* Header with glassmorphism effect */}
-      <header className="bg-background/80 backdrop-blur-xl border-b border-primary/20 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <header className="bg-background/80 backdrop-blur-xl border-b border-primary/20 sticky top-0 z-10 w-full tour-header">
+        <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <BookUser className="h-8 w-8 text-primary" />
@@ -82,13 +82,13 @@ const Index = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative glass-btn-strong text-zinc-700 dark:text-white">
                 <Bell className="h-5 w-5" />
                 <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
               </Button>
               <ThemeToggle />
               <Button 
-                className="bg-primary hover:bg-primary-hover text-primary-foreground px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 hidden sm:flex"
+                className="glass-btn-strong text-zinc-700 dark:text-white"
                 title="Begin your learning journey"
                 onClick={() => setShowPersonalized(!showPersonalized)}
               >
@@ -121,25 +121,25 @@ const Index = () => {
         </div>
       </div>
       
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-8">
         {showPersonalized ? (
           <PersonalizedLearning />
         ) : (
           <>
             {/* Featured Courses Section */}
-            <div className="mb-12">
+            <div className="mb-12 tour-featured-courses">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold">Featured Courses</h2>
                 <Button 
                   variant="outline" 
-                  className="text-sm border-primary/20 hover:bg-background/60"
+                  className="text-sm border-primary/20 hover:bg-background/60 glass-btn-strong"
                   onClick={() => setShowPersonalized(true)}
                 >
                   Personalize Learning
                 </Button>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 max-w-[2000px] mx-auto">
                 {FEATURED_COURSES.map((course, index) => (
                   <Card 
                     key={index} 
@@ -165,7 +165,7 @@ const Index = () => {
                       </div>
                     </CardContent>
                     <CardFooter className="p-4 pt-0">
-                      <Button className="w-full" variant="secondary">
+                      <Button className="w-full glass-btn-strong" variant="secondary">
                         Enroll Now
                       </Button>
                     </CardFooter>
@@ -174,8 +174,8 @@ const Index = () => {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2">
+            <div className="grid grid-cols-1 xl:grid-cols-4 gap-8 max-w-[2000px] mx-auto">
+              <div className="xl:col-span-3">
                 <LearningPath />
               </div>
               <div>
@@ -187,6 +187,9 @@ const Index = () => {
       </main>
       
       <CourseChat />
+      
+      {/* Global Tour Component */}
+      <GlobalTour />
     </div>
   );
 };
