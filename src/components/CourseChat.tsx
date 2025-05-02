@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { CourseRecommendations } from "@/components/CourseRecommendations";
 import { LEARNING_LEVELS, LEARNING_GOALS, COURSE_CATEGORIES } from "@/utils/courseData";
+import axios from "axios";
 
 const ONBOARDING_STEPS = [
   {
@@ -53,8 +54,8 @@ export const CourseChat = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Define the Gemini API key - hardcoded for demo purposes (would normally come from env vars)
-  const geminiApiKey = "AIzaSyCM8RqXyQgJfH7hu3gW1vjRW0xv8LmZ598";
+  // Define the Gemini API key - now using environment variable
+  const geminiApiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
   // Use OpenRouter (free-tier) as a fallback LLM provider
   const openRouterApiKey = "demo"; // 'demo' key works for public/free-tier
@@ -184,38 +185,37 @@ Context:`;
     try {
       const personalizedMessage = generatePersonalizedPrompt(message);
 
-      const response = await fetch(
+      const response = await axios.post(
         "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=" + geminiApiKey,
         {
-          method: "POST",
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: personalizedMessage }],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1000,
+            topP: 0.8,
+            topK: 40,
+          },
+          safetySettings: [
+            {
+              category: "HARM_CATEGORY_HARASSMENT",
+              threshold: "BLOCK_MEDIUM_AND_ABOVE",
+            },
+          ],
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            contents: [
-              {
-                role: "user",
-                parts: [{ text: personalizedMessage }],
-              },
-            ],
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 1000,
-              topP: 0.8,
-              topK: 40,
-            },
-            safetySettings: [
-              {
-                category: "HARM_CATEGORY_HARASSMENT",
-                threshold: "BLOCK_MEDIUM_AND_ABOVE",
-              },
-            ],
-          }),
         }
       );
 
-      if (response.ok) {
-        const data = await response.json();
+      if (response.status === 200) {
+        const data = response.data;
         const assistantMessage = {
           role: "assistant" as const,
           content: data.candidates[0].content.parts[0].text,

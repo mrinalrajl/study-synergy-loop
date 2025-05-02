@@ -86,7 +86,8 @@ export const Leaderboard = () => {
             style={{backdropFilter: user.rank === 1 ? 'blur(2px) saturate(120%)' : undefined}}
           >
             <div className="flex items-center space-x-4">
-              <div className={`w-8 text-center font-semibold ${user.rank <= 3 ? "animate-bounce" : ""}`}>
+              <div className={`w-8 text-center font-semibold ${user.rank <= 3 ? "animate-bounce" : ""}`}
+                style={{ color: user.rank <= 3 ? undefined : 'var(--foreground)' }}>
                 {getRankIcon(user.rank) || `#${user.rank}`}
               </div>
               <div>
@@ -110,7 +111,7 @@ export const Leaderboard = () => {
         <div className="flex gap-2">
           <Dialog open={shareOpen} onOpenChange={setShareOpen}>
             <DialogTrigger asChild>
-              <button className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2">
+              <button className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2 bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground">
                 <Share2 className="w-4 h-4" /> Share
               </button>
             </DialogTrigger>
@@ -129,7 +130,7 @@ export const Leaderboard = () => {
           </Dialog>
           <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
             <DialogTrigger asChild>
-              <button className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2">
+              <button className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2 bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground">
                 <User className="w-4 h-4" /> View Profile
               </button>
             </DialogTrigger>
