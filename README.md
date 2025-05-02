@@ -68,6 +68,7 @@ Simply open [Lovable](https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
 
+<<<<<<< HEAD
 ## 🍏 Apple-Inspired Animated Notifications
 
 This app uses a custom AnimatedToaster notification system with Framer Motion for beautiful, Mac-like bounce and pop effects. Notifications appear in the top-right with glassmorphism, shadow, and smooth transitions.
@@ -103,3 +104,8 @@ password:- abc@gmail.com
 
 ## Creating a RAG Bot for User
 This bot will help user to create a course suggestion and tries to encourage you with your learning
+=======
+
+## This is a just sample with the LoveableAI
+This can be modified and then used again depending upon the need of the user based on the requirement and the prompt to create a new application and to maintain overall system.
+>>>>>>> c416ebcb95e0303b3f1d41634320960d40f17a52
