@@ -19,8 +19,8 @@ export const ChatSuggestions: React.FC<ChatSuggestionsProps> = ({
     
     // Look for topic matches
     Object.entries(TOPIC_SUGGESTIONS).forEach(([topic, topicSuggestions]) => {
-      if (message.toLowerCase().includes(topic)) {
-        matchedSuggestions.push(...topicSuggestions);
+      if (message.toLowerCase().includes(topic.toLowerCase())) {
+        matchedSuggestions.push(...topicSuggestions.slice(0, 5)); // Limit to 5 suggestions per topic
       }
     });
     
@@ -33,11 +33,11 @@ export const ChatSuggestions: React.FC<ChatSuggestionsProps> = ({
   if (suggestions.length === 0) return null;
 
   return (
-    <div className="absolute bottom-full mb-1 w-full bg-background/80 backdrop-blur-xl border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto z-10">
+    <div className="absolute bottom-full mb-1 w-full bg-background/90 backdrop-blur-xl border border-primary/20 rounded-lg shadow-lg max-h-48 overflow-y-auto z-10">
       {suggestions.map((suggestion, index) => (
         <div
           key={index}
-          className="p-2 hover:bg-background/60 cursor-pointer text-left text-sm border-b last:border-b-0 border-border"
+          className="p-2 hover:bg-primary/10 cursor-pointer text-left text-sm border-b last:border-b-0 border-border"
           onClick={() => onSelectSuggestion(suggestion)}
         >
           {suggestion}

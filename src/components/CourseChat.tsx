@@ -25,8 +25,8 @@ export const CourseChat = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Define the Gemini API key - hardcoded for demo purposes
-  const geminiApiKey = "AIzaSyCM8RqXyQgJfH7hu3gW1vjRW0xv8LmZ598"; // This is a demo key, replace with actual key
+  // Define the Gemini API key - hardcoded for demo purposes (would normally come from env vars)
+  const geminiApiKey = "AIzaSyCM8RqXyQgJfH7hu3gW1vjRW0xv8LmZ598";
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -166,6 +166,12 @@ export const CourseChat = () => {
             variant: "destructive",
           });
         }
+      } else {
+        toast({
+          title: "Error",
+          description: "API request failed and no fallback API key provided.",
+          variant: "destructive",
+        });
       }
     } finally {
       setIsLoading(false);
@@ -224,7 +230,11 @@ export const CourseChat = () => {
 
   // Desktop view shows a fixed chat window
   const renderDesktopChat = () => (
-    <div className="fixed bottom-4 right-4 w-96 h-[500px] bg-background/80 backdrop-blur-xl border border-primary/20 rounded-lg shadow-lg flex flex-col hidden md:flex glass-container">
+    <div 
+      className={`fixed bottom-4 right-4 w-96 ${
+        isMinimized ? 'h-16' : 'h-[500px]'
+      } bg-background/80 backdrop-blur-xl border border-primary/20 rounded-lg shadow-lg flex flex-col hidden md:flex glass-container transition-all duration-300`}
+    >
       <div className="p-4 border-b border-border flex justify-between items-center">
         <h3 className="font-semibold flex items-center gap-2">
           <BookUser className="h-5 w-5 text-primary" />
