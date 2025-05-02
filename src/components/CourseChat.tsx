@@ -1,7 +1,11 @@
 
 import { useState, useEffect, useRef } from "react";
-import { Send } from "lucide-react";
+import { BookOpen, Send, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { Command, CommandInput, CommandList, CommandGroup, CommandItem } from "@/components/ui/command";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Predefined suggestions for different topics
 const TOPIC_SUGGESTIONS: Record<string, string[]> = {
@@ -51,6 +55,24 @@ const DEFAULT_SUGGESTIONS = [
   "Career transition guidance"
 ];
 
+// Learning levels for users to select
+const LEARNING_LEVELS = [
+  "Beginner",
+  "Intermediate",
+  "Advanced",
+  "Expert"
+];
+
+// Learning goals templates
+const LEARNING_GOALS = [
+  "Get a job in tech",
+  "Improve current skills",
+  "Change career paths",
+  "Launch a project/startup",
+  "Academic research",
+  "Personal interest"
+];
+
 export const CourseChat = () => {
   const [message, setMessage] = useState("");
   const [apiKey, setApiKey] = useState("");
@@ -58,6 +80,10 @@ export const CourseChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [learningLevel, setLearningLevel] = useState("");
+  const [learningGoal, setLearningGoal] = useState("");
+  const [isMinimized, setIsMinimized] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const suggestionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -107,6 +133,21 @@ export const CourseChat = () => {
     inputRef.current?.focus();
   };
 
+  // Generate a personalized prompt based on user's learning level and goal
+  const generatePersonalizedPrompt = (userMessage: string) => {
+    let prompt = userMessage;
+    
+    if (learningLevel) {
+      prompt += `\n\nMy learning level is: ${learningLevel}.`;
+    }
+    
+    if (learningGoal) {
+      prompt += `\n\nMy learning goal is: ${learningGoal}.`;
+    }
+    
+    return prompt;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
@@ -119,6 +160,7 @@ export const CourseChat = () => {
       return;
     }
 
+    const personalizedMessage = generatePersonalizedPrompt(message);
     const userMessage = { role: "user" as const, content: message };
     setMessages(prev => [...prev, userMessage]);
     setMessage("");
@@ -137,10 +179,10 @@ export const CourseChat = () => {
           messages: [
             {
               role: 'system',
-              content: 'You are a helpful learning assistant that suggests personalized courses and helps users achieve their learning goals. Keep responses focused on educational guidance and motivation.'
+              content: 'You are a helpful learning assistant that suggests personalized courses and helps users achieve their learning goals. Keep responses focused on educational guidance and motivation. Tailor recommendations based on user\'s learning level and goals when provided.'
             },
             ...messages,
-            userMessage
+            { role: 'user', content: personalizedMessage }
           ],
           temperature: 0.7,
           max_tokens: 1000,
@@ -163,12 +205,67 @@ export const CourseChat = () => {
     }
   };
 
-  return (
-    <div className="fixed bottom-4 right-4 w-96 h-[500px] bg-background border border-border rounded-lg shadow-lg flex flex-col">
-      <div className="p-4 border-b border-border">
-        <h3 className="font-semibold">Learning Assistant</h3>
-      </div>
+  const handleSelectLearningLevel = (value: string) => {
+    setLearningLevel(value);
+  };
 
+  const handleSelectLearningGoal = (goal: string) => {
+    setLearningGoal(goal);
+  };
+
+  const clearChat = () => {
+    setMessages([]);
+    toast({
+      title: "Chat cleared",
+      description: "Your conversation history has been cleared.",
+    });
+  };
+
+  // Mobile view uses a Sheet component
+  const renderMobileChat = () => (
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <Button 
+          className="fixed bottom-4 right-4 rounded-full shadow-lg h-14 w-14 p-0 flex items-center justify-center md:hidden"
+          size="icon"
+        >
+          <BookOpen className="h-6 w-6" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="sm:max-w-full h-[90vh] flex flex-col p-0">
+        <SheetHeader className="p-4 border-b border-border">
+          <SheetTitle className="text-center">Learning Assistant</SheetTitle>
+        </SheetHeader>
+        {renderChatContent()}
+      </SheetContent>
+    </Sheet>
+  );
+
+  // Desktop view shows a fixed chat window
+  const renderDesktopChat = () => (
+    <div className="fixed bottom-4 right-4 w-96 h-[500px] bg-background border border-border rounded-lg shadow-lg flex flex-col hidden md:flex">
+      <div className="p-4 border-b border-border flex justify-between items-center">
+        <h3 className="font-semibold">Learning Assistant</h3>
+        <div className="flex gap-1">
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="h-8 w-8" 
+            onClick={() => setIsMinimized(!isMinimized)}
+            aria-label={isMinimized ? "Expand" : "Minimize"}
+          >
+            {isMinimized ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+        </div>
+      </div>
+      
+      {!isMinimized && renderChatContent()}
+    </div>
+  );
+
+  // Common chat content for both mobile and desktop
+  const renderChatContent = () => (
+    <>
       {!apiKey && (
         <div className="p-4">
           <input
@@ -193,6 +290,43 @@ export const CourseChat = () => {
       )}
 
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 && (
+          <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
+            <BookOpen className="h-12 w-12 mb-4 opacity-50" />
+            <h3 className="font-medium text-lg">Welcome to Learning Assistant</h3>
+            <p className="text-sm max-w-xs">
+              Ask me about courses, learning paths, or anything related to your educational journey!
+            </p>
+            <div className="grid grid-cols-2 gap-2 mt-4 w-full">
+              <Select value={learningLevel} onValueChange={handleSelectLearningLevel}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Learning Level" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LEARNING_LEVELS.map(level => (
+                    <SelectItem key={level} value={level}>
+                      {level}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <Select value={learningGoal} onValueChange={handleSelectLearningGoal}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Learning Goal" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LEARNING_GOALS.map(goal => (
+                    <SelectItem key={goal} value={goal}>
+                      {goal}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        )}
+        
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -220,6 +354,19 @@ export const CourseChat = () => {
         )}
       </div>
 
+      {messages.length > 0 && (
+        <div className="px-4 py-2">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={clearChat} 
+            className="text-xs w-full"
+          >
+            Clear conversation
+          </Button>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="p-4 border-t border-border">
         <div className="flex flex-col gap-2">
           <div className="relative w-full">
@@ -229,9 +376,18 @@ export const CourseChat = () => {
               value={message}
               onChange={handleInputChange}
               placeholder="Ask about courses or learning goals..."
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary pr-10"
               onFocus={() => message.length > 2 && setShowSuggestions(true)}
             />
+            <Button
+              type="submit"
+              disabled={isLoading || !message.trim()}
+              className="absolute right-1 top-1 p-1 h-8 w-8"
+              size="icon"
+              variant="ghost"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
             
             {showSuggestions && (
               <div 
@@ -250,27 +406,15 @@ export const CourseChat = () => {
               </div>
             )}
           </div>
-          
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={message}
-              onChange={handleInputChange}
-              placeholder="Ask about courses or learning goals..."
-              className="flex-1 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-              onFocus={() => message.length > 2 && setShowSuggestions(true)}
-              hidden
-            />
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-hover disabled:opacity-50"
-            >
-              <Send className="w-5 h-5" />
-            </button>
-          </div>
         </div>
       </form>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {renderMobileChat()}
+      {renderDesktopChat()}
+    </>
   );
 };
