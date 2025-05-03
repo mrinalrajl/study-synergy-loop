@@ -1,4 +1,22 @@
-# Welcome to your Lovable project
+# Study Synergy Loop
+
+A modern learning platform with personalized AI-powered course recommendations, free course suggestions, and productivity tools.
+
+---
+
+## ✨ AI-Powered Features (Groq)
+
+- **Personalized Learning Path:**
+  - Enter your topic, experience, duration, and goal.
+  - Get a custom learning path and 4 AI-recommended courses, powered by Groq.
+  - No star ratings are shown for these AI recommendations—just clear, actionable suggestions.
+
+- **Free Udemy Course Suggestions:**
+  - Groq AI suggests 4 free Udemy courses for your chosen topic.
+  - Each course includes title, description, instructor, and star ratings for popularity and quality.
+  - Stars are shown based on the AI's assessment of course popularity and rating.
+
+---
 
 ## Project info
 
@@ -52,13 +70,13 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
-
+This project is built with:
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Groq (for AI recommendations)
 
 ## How can I deploy this project?
 
@@ -68,7 +86,6 @@ Simply open [Lovable](https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
 
-<<<<<<< HEAD
 ## 🍏 Apple-Inspired Animated Notifications
 
 This app uses a custom AnimatedToaster notification system with Framer Motion for beautiful, Mac-like bounce and pop effects. Notifications appear in the top-right with glassmorphism, shadow, and smooth transitions.
@@ -93,19 +110,13 @@ This app uses a custom AnimatedToaster notification system with Framer Motion fo
 
 ---
 
-## This is a just sample with the LoveableAI
-This can be modified and then used again depending upon the need of the user based on the requirement and the prompt to create a new application and to maintain overall system.
-
-## Login Cred  
+## Sample Login Credentials
 ```sh
-Email:- abc@gmail.com
-password:- abc@gmail.com
+Email: abc@gmail.com
+Password: abc@gmail.com
 ```
 
-## Creating a RAG Bot for User
-This bot will help user to create a course suggestion and tries to encourage you with your learning
-=======
+## About
+This project is a sample created with LoveableAI. You can modify and extend it as needed for your own learning or development goals.
 
-## This is a just sample with the LoveableAI
-This can be modified and then used again depending upon the need of the user based on the requirement and the prompt to create a new application and to maintain overall system.
->>>>>>> c416ebcb95e0303b3f1d41634320960d40f17a52
+---
