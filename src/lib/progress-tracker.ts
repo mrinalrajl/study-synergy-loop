@@ -25,14 +25,17 @@ type ProgressTrackerState = {
 const PROGRESS_STORAGE_KEY = 'learning_progress_data';
 const ACTIVITY_INTERVAL = 30000; // 30 seconds
 
+// Default state
+const defaultProgressState: ProgressTrackerState = {
+  courses: {},
+  totalLearningTimeSeconds: 0,
+  weeklyGoalHours: 5,
+  weeklyProgress: {},
+};
+
 // Custom hook for tracking user progress
 export const useProgressTracker = () => {
-  const [progressData, setProgressData] = useLocalStorage<ProgressTrackerState>(PROGRESS_STORAGE_KEY, {
-    courses: {},
-    totalLearningTimeSeconds: 0,
-    weeklyGoalHours: 5,
-    weeklyProgress: {},
-  });
+  const [progressData, setProgressData] = useLocalStorage<ProgressTrackerState>(PROGRESS_STORAGE_KEY, defaultProgressState);
 
   // Start tracking time for a course
   const startTrackingTime = (courseId: string, courseName: string, totalModules: number) => {
@@ -61,7 +64,7 @@ export const useProgressTracker = () => {
     });
     
     // Track engagement event
-    const isNewEnrollment = !progressData.courses[courseId];
+    const isNewEnrollment = !progressData?.courses?.[courseId];
     if (isNewEnrollment) {
       trackCourseEngagement(courseId, 'enroll');
     }
@@ -109,7 +112,7 @@ export const useProgressTracker = () => {
   
   // Stop tracking time for a course
   const stopTrackingTime = (courseId: string) => {
-    const course = progressData.courses[courseId];
+    const course = progressData?.courses?.[courseId];
     if (course) {
       // Nothing to do here as we're just stopping the tracking
       // This method would be more useful if we had an active timer
@@ -130,7 +133,6 @@ export const useProgressTracker = () => {
       
       const completedModules = [...course.completedModules, moduleId];
       const progress = Math.round((completedModules.length / course.totalModules) * 100);
-      const isFullyCompleted = progress === 100;
       
       return {
         ...prev,
@@ -150,7 +152,7 @@ export const useProgressTracker = () => {
     trackCourseEngagement(courseId, 'progress');
     
     // If course is completed, track that too
-    const updatedCourse = progressData.courses[courseId];
+    const updatedCourse = progressData?.courses?.[courseId];
     if (updatedCourse && updatedCourse.progress === 100) {
       trackCourseEngagement(courseId, 'complete');
     }
@@ -168,19 +170,24 @@ export const useProgressTracker = () => {
   
   // Calculate weekly progress percentage
   const getWeeklyProgressPercent = (): number => {
-    const weeklyTotalSeconds = Object.values(progressData.weeklyProgress).reduce((sum, day) => sum + day, 0);
-    const weeklyGoalSeconds = progressData.weeklyGoalHours * 3600;
+    const weeklyTotalSeconds = Object.values(progressData?.weeklyProgress || {}).reduce((sum, day) => sum + day, 0);
+    const weeklyGoalSeconds = progressData?.weeklyGoalHours ? progressData.weeklyGoalHours * 3600 : 0;
     return weeklyGoalSeconds > 0 ? Math.min(100, Math.round((weeklyTotalSeconds / weeklyGoalSeconds) * 100)) : 0;
   };
   
   // Get all course progress data
   const getAllCoursesProgress = (): CourseProgress[] => {
+    // Fix: Ensure courses exists and if not, return an empty array
+    if (!progressData?.courses) {
+      return [];
+    }
+    
     return Object.values(progressData.courses).sort((a, b) => b.lastActiveDate - a.lastActiveDate);
   };
   
   // Get progress for a specific course
   const getCourseProgress = (courseId: string): CourseProgress | null => {
-    return progressData.courses[courseId] || null;
+    return progressData?.courses?.[courseId] || null;
   };
   
   // Reset weekly progress
@@ -201,9 +208,9 @@ export const useProgressTracker = () => {
     getAllCoursesProgress,
     getCourseProgress,
     resetWeeklyProgress,
-    weeklyGoalHours: progressData.weeklyGoalHours,
-    totalLearningTime: progressData.totalLearningTimeSeconds,
-    weeklyProgress: progressData.weeklyProgress,
+    weeklyGoalHours: progressData?.weeklyGoalHours || 0,
+    totalLearningTime: progressData?.totalLearningTimeSeconds || 0,
+    weeklyProgress: progressData?.weeklyProgress || {},
   };
 };
 
