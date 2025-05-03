@@ -247,9 +247,9 @@ export const LearningDashboard = () => {
                         <SelectValue placeholder="Duration" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="short">Short (<3h)</SelectItem>
+                        <SelectItem value="short">Short (&lt;3h)</SelectItem>
                         <SelectItem value="medium">Medium (3-10h)</SelectItem>
-                        <SelectItem value="long">Long (>10h)</SelectItem>
+                        <SelectItem value="long">Long (&gt;10h)</SelectItem>
                       </SelectContent>
                     </Select>
                     
