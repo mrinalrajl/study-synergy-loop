@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthLayout } from "@/components/AuthLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
+import { Mail, LockKeyhole, Eye, EyeOff, User } from "lucide-react";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -90,7 +91,7 @@ const Signup = () => {
         <div className="space-y-4">
           <div className="relative animate-fade-in [animation-delay:400ms]">
             <div className="absolute left-3 top-3 text-muted-foreground">
-              <FaUser size={16} />
+              <User size={16} />
             </div>
             <Input
               id="name"
@@ -107,7 +108,7 @@ const Signup = () => {
 
           <div className="relative animate-fade-in [animation-delay:600ms]">
             <div className="absolute left-3 top-3 text-muted-foreground">
-              <FaEnvelope size={16} />
+              <Mail size={16} />
             </div>
             <Input
               id="email"
@@ -124,7 +125,7 @@ const Signup = () => {
           <div className="space-y-2 animate-fade-in [animation-delay:800ms]">
             <div className="relative">
               <div className="absolute left-3 top-3 text-muted-foreground">
-                <FaLock size={16} />
+                <LockKeyhole size={16} />
               </div>
               <Input
                 id="password"
@@ -141,7 +142,7 @@ const Signup = () => {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
               >
-                {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
             </div>
             
