@@ -5,7 +5,7 @@ import { PersonalizedLearning } from "@/components/PersonalizedLearning";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { GlobalTour } from "@/components/GlobalTour";
 import { useAuth } from "@/contexts/AuthContext";
-import { BookOpen, LogOut, Search, Star, BookUser, Bell } from "lucide-react";
+import { BookOpen, LogOut, Search, Star, BookUser, Bell, Bot } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -68,6 +68,18 @@ const Index = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary-hover text-transparent bg-clip-text">Learning Path</h1>
                 <p className="text-sm text-muted-foreground">Welcome back, {user?.name}!</p>
               </div>
+              {/* Learning Assistant Bot Icon */}
+              <button
+                title="Open Learning Assistant"
+                className="ml-2 flex items-center justify-center rounded-full bg-primary/90 hover:bg-primary text-primary-foreground shadow p-2 transition-all"
+                onClick={() => {
+                  // Open the CourseChat (Learning Assistant) if not already open
+                  const chatBtn = document.querySelector('[aria-label="Open Learning Assistant"]') as HTMLElement;
+                  if (chatBtn) chatBtn.click();
+                }}
+              >
+                <Bot className="h-6 w-6" />
+              </button>
             </div>
             <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-8">
               <div className="relative w-full">
