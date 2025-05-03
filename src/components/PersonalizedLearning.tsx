@@ -21,7 +21,6 @@ import TopicRecommendations from "./TopicRecommendations";
 import { Leaderboard } from "./Leaderboard";
 import { CourseChat } from "./CourseChat";
 import { fetchGroq } from "@/lib/groqClient";
-import { fetchUdemyFreeCourses } from "@/lib/udemyApi";
 
 // Learning durations for users to select
 const LEARNING_DURATIONS = [
@@ -130,6 +129,9 @@ const DEMO_STEPS = [
   }
 ];
 
+// Helper to render stars
+const renderStars = (count: number) => '★'.repeat(count) + '☆'.repeat(5 - count);
+
 export const PersonalizedLearning = () => {
   const [topic, setTopic] = useState("");
   const [level, setLevel] = useState("");
@@ -172,16 +174,6 @@ export const PersonalizedLearning = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (showRecommendations && topic) {
-      setIsLoadingUdemy(true);
-      fetchUdemyFreeCourses(topic)
-        .then(setUdemyCourses)
-        .catch(() => setUdemyCourses([]))
-        .finally(() => setIsLoadingUdemy(false));
-    }
-  }, [showRecommendations, topic]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -197,13 +189,26 @@ export const PersonalizedLearning = () => {
     setShowRecommendations(true);
     setIsLoadingAI(true);
     setAiRecommendations([]);
+    setUdemyCourses([]);
+    setIsLoadingUdemy(true);
 
     try {
+      // AI Recommended Courses
       const prompt = `Suggest a personalized learning path and 4 recommended courses for the following user preferences.\n\nTopic: ${topic}\nLevel: ${level}\nDuration: ${duration}\nGoal: ${goal}\n\nFormat the response as a numbered list of course titles with a short description for each.`;
       const aiText = await fetchGroq(prompt);
-      console.log("Groq raw response:", aiText); // Debug log
       const lines = aiText.split(/\n|\r/).filter(Boolean).slice(0, 4);
       setAiRecommendations(lines.length ? lines : fallbackCourses);
+
+      // Free Udemy Courses via Groq
+      const udemyPrompt = `Suggest 4 free Udemy courses for learning ${topic}. For each, include: title, a short description, instructor, popularity (1-5 stars), and rating (1-5 stars). Format as a JSON array.`;
+      const udemyText = await fetchGroq(udemyPrompt);
+      let udemyList = [];
+      try {
+        udemyList = JSON.parse(udemyText);
+      } catch {
+        udemyList = [];
+      }
+      setUdemyCourses(Array.isArray(udemyList) ? udemyList : []);
     } catch (err) {
       toast({
         title: "AI Error",
@@ -211,8 +216,10 @@ export const PersonalizedLearning = () => {
         variant: "destructive",
       });
       setAiRecommendations(fallbackCourses);
+      setUdemyCourses([]);
     } finally {
       setIsLoadingAI(false);
+      setIsLoadingUdemy(false);
     }
 
     toast({
@@ -280,9 +287,9 @@ export const PersonalizedLearning = () => {
     audio.play();
   };
 
-  const handleEnroll = (courseId: string) => {
-    if (!enrolledCourses.includes(courseId)) {
-      const updated = [...enrolledCourses, courseId];
+  const handleEnroll = (courseTitle: string) => {
+    if (!enrolledCourses.includes(courseTitle)) {
+      const updated = [...enrolledCourses, courseTitle];
       setEnrolledCourses(updated);
       localStorage.setItem("enrolled_courses", JSON.stringify(updated));
       toast({ title: "Enrolled!", description: "Course added to your learning path." });
@@ -468,29 +475,28 @@ export const PersonalizedLearning = () => {
                 {isLoadingUdemy ? (
                   <div className="text-muted-foreground">Loading free courses...</div>
                 ) : udemyCourses.length > 0 ? (
-                  udemyCourses.map((course) => (
-                    <div key={course.id} className="p-2 bg-background/40 rounded border border-border flex gap-3 items-center">
-                      <img src={course.image} alt={course.title} className="w-20 h-12 object-cover rounded" />
+                  udemyCourses.map((course, idx) => (
+                    <div key={idx} className="p-2 bg-background/40 rounded border border-border flex gap-3 items-center">
                       <div className="flex-1">
                         <div className="font-medium text-sm flex justify-between">
-                          <a href={course.url} target="_blank" rel="noopener noreferrer" className="hover:underline">{course.title}</a>
+                          <span>{course.title}</span>
                           <span className="px-2 py-0.5 text-xs bg-secondary/30 rounded-full">Free</span>
                         </div>
                         <div className="text-xs text-muted-foreground">{course.description}</div>
-                        <div className="text-xs mt-1 flex justify-between items-center">
-                          <span className="px-2 py-0.5 bg-primary/20 text-primary rounded-full">{course.instructor}</span>
-                          <span className="ml-2">⭐ {course.rating?.toFixed(1) || "N/A"}</span>
-                          <span className="ml-2">👥 {course.enrolled}</span>
+                        <div className="text-xs mt-1 flex flex-col gap-1">
+                          <span>Instructor: {course.instructor}</span>
+                          <span>Popularity: <span className="text-yellow-400">{renderStars(course.popularity)}</span></span>
+                          <span>Rating: <span className="text-yellow-400">{renderStars(course.rating)}</span></span>
                         </div>
                       </div>
                       <Button
                         size="sm"
-                        variant={enrolledCourses.includes(course.id) ? "default" : "outline"}
+                        variant={enrolledCourses.includes(course.title) ? "default" : "outline"}
                         className="ml-2 text-xs"
-                        disabled={enrolledCourses.includes(course.id)}
-                        onClick={() => handleEnroll(course.id)}
+                        disabled={enrolledCourses.includes(course.title)}
+                        onClick={() => handleEnroll(course.title)}
                       >
-                        {enrolledCourses.includes(course.id) ? "Enrolled" : "Enroll"}
+                        {enrolledCourses.includes(course.title) ? "Enrolled" : "Enroll"}
                       </Button>
                     </div>
                   ))
