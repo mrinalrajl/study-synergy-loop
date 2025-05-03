@@ -1,4 +1,3 @@
-
 // Course categories by field
 export const COURSE_CATEGORIES = {
   "AI & Machine Learning": [
@@ -49,14 +48,25 @@ export const TOPIC_SUGGESTIONS: Record<string, string[]> = {
     "Neural Networks",
     "Natural Language Processing",
     "Computer Vision",
-    "ML in Production Environments"
+    "ML in Production Environments",
+    "AI-Powered Career Path Analysis",
+    "Personalized Learning with Gemini"
   ],
   "python": [
     "Python for Beginners",
     "Data Science with Python",
     "Machine Learning with Python",
     "Web Development with Django",
-    "Python for Automation"
+    "Python for Automation",
+    "AI Development with Python"
+  ],
+  "ai": [
+    "Understanding Large Language Models",
+    "Gemini API Integration",
+    "AI Ethics and Governance",
+    "Conversational AI Development",
+    "AI for Personalized Learning",
+    "Building AI-Powered Applications"
   ],
   "design": [
     "UI/UX Fundamentals",
@@ -83,12 +93,13 @@ export const TOPIC_SUGGESTIONS: Record<string, string[]> = {
 
 // Generic suggestions when no specific match is found
 export const DEFAULT_SUGGESTIONS = [
-  "Course recommendations for beginners",
-  "Advanced learning paths",
-  "Most popular tech courses",
-  "Career transition guidance",
-  "Skill assessment help",
-  "Learning schedule optimization"
+  "Analyze my learning style",
+  "Get personalized course recommendations",
+  "Create an AI-powered learning path",
+  "Find courses matching my skill level",
+  "Compare learning resources",
+  "Get career transition guidance",
+  "Optimize my learning schedule"
 ];
 
 // Learning levels for users to select

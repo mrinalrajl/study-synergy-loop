@@ -1,96 +1,187 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { AuthLayout } from "@/components/AuthLayout";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({
+    score: 0,
+    message: ""
+  });
   const { signup } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const calculatePasswordStrength = (value: string) => {
+    let score = 0;
+    let message = "";
+
+    if (value.length >= 8) score += 1;
+    if (/[A-Z]/.test(value)) score += 1;
+    if (/[0-9]/.test(value)) score += 1;
+    if (/[^A-Za-z0-9]/.test(value)) score += 1;
+
+    switch (score) {
+      case 0:
+        message = "Too weak";
+        break;
+      case 1:
+        message = "Weak";
+        break;
+      case 2:
+        message = "Fair";
+        break;
+      case 3:
+        message = "Good";
+        break;
+      case 4:
+        message = "Strong";
+        break;
+    }
+
+    setPasswordStrength({ score, message });
+  };
+
+  useEffect(() => {
+    if (password) {
+      calculatePasswordStrength(password);
+    }
+  }, [password]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    signup(email, name, password);
+    setIsLoading(true);
+    try {
+      await signup(email, name, password);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getPasswordStrengthColor = () => {
+    switch (passwordStrength.score) {
+      case 1:
+        return "bg-red-500";
+      case 2:
+        return "bg-yellow-500";
+      case 3:
+        return "bg-blue-500";
+      case 4:
+        return "bg-green-500";
+      default:
+        return "bg-gray-200";
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create a new account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{" "}
-            <Link
-              to="/login"
-              className="font-medium text-primary hover:text-primary-hover"
-            >
-              sign in to your existing account
-            </Link>
-          </p>
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm space-y-4">
-            <div>
-              <label htmlFor="name" className="sr-only">
-                Full name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Full name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
+    <AuthLayout 
+      title="Create account" 
+      subtitle="Join us to start your learning journey"
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="space-y-4">
+          <div className="relative animate-fade-in [animation-delay:400ms]">
+            <div className="absolute left-3 top-3 text-muted-foreground">
+              <FaUser size={16} />
             </div>
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+            <Input
+              id="name"
+              type="text"
+              placeholder="Full name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="pl-10 h-12 bg-background/50"
+              required
+              autoComplete="name"
+              autoFocus
+            />
+          </div>
+
+          <div className="relative animate-fade-in [animation-delay:600ms]">
+            <div className="absolute left-3 top-3 text-muted-foreground">
+              <FaEnvelope size={16} />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="pl-10 h-12 bg-background/50"
+              required
+              autoComplete="email"
+            />
+          </div>
+
+          <div className="space-y-2 animate-fade-in [animation-delay:800ms]">
+            <div className="relative">
+              <div className="absolute left-3 top-3 text-muted-foreground">
+                <FaLock size={16} />
+              </div>
+              <Input
                 id="password"
-                name="password"
-                type="password"
-                required
-                className="appearance-none rounded-lg relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className="pl-10 pr-10 h-12 bg-background/50"
+                required
+                autoComplete="new-password"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+              </button>
             </div>
+            
+            {password && (
+              <div className="space-y-2">
+                <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                  <div 
+                    className={`h-full transition-all duration-300 ${getPasswordStrengthColor()}`}
+                    style={{ width: `${(passwordStrength.score / 4) * 100}%` }}
+                  />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Password strength: {passwordStrength.message}
+                </p>
+              </div>
+            )}
           </div>
+        </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-            >
-              Create account
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="pt-2 animate-fade-in [animation-delay:1000ms]">
+          <Button
+            type="submit"
+            className="w-full h-12 text-base font-medium glass-btn-strong"
+            disabled={isLoading || passwordStrength.score < 3}
+          >
+            {isLoading ? "Creating account..." : "Create account"}
+          </Button>
+        </div>
+
+        <p className="text-center text-sm text-muted-foreground animate-fade-in [animation-delay:1200ms]">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-medium text-primary hover:text-primary-hover transition-colors"
+          >
+            Sign in instead
+          </Link>
+        </p>
+      </form>
+    </AuthLayout>
   );
 };
 

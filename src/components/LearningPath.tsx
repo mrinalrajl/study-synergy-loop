@@ -1,7 +1,8 @@
-
 import { Trophy, Star, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 interface Module {
   id: number;
@@ -14,44 +15,122 @@ interface Module {
 }
 
 export const LearningPath = () => {
-  const [modules] = useState<Module[]>([
-    {
-      id: 1,
-      title: "Foundations",
-      description: "Build your core knowledge",
-      progress: 100,
-      completed: true,
-      skills: ["Critical Thinking", "Basic Concepts", "Terminology"],
-      estimatedTime: "4-6 hours",
-    },
-    {
-      id: 2,
-      title: "Intermediate Applications",
-      description: "Apply concepts to real scenarios",
-      progress: 60,
-      completed: false,
-      skills: ["Problem Solving", "Analysis", "Implementation"],
-      estimatedTime: "8-10 hours",
-    },
-    {
-      id: 3,
-      title: "Advanced Techniques",
-      description: "Master complex methodologies",
-      progress: 0,
-      completed: false,
-      skills: ["Innovation", "Optimization", "Research Methods"],
-      estimatedTime: "12-15 hours",
-    },
-    {
-      id: 4,
-      title: "Expert Specialization",
-      description: "Become a domain expert",
-      progress: 0,
-      completed: false,
-      skills: ["Leadership", "Original Contribution", "Thought Leadership"],
-      estimatedTime: "15-20 hours",
+  const [modules, setModules] = useState<Module[]>([]);
+  const { user, updateProgress } = useAuth();
+  const { toast } = useToast();
+
+  // Initialize modules with user progress
+  useEffect(() => {
+    const initialModules: Module[] = [
+      {
+        id: 1,
+        title: "Foundations",
+        description: "Build your core knowledge",
+        progress: 0,
+        completed: false,
+        skills: ["Critical Thinking", "Basic Concepts", "Terminology"],
+        estimatedTime: "4-6 hours",
+      },
+      {
+        id: 2,
+        title: "Intermediate Applications",
+        description: "Apply concepts to real scenarios",
+        progress: 0,
+        completed: false,
+        skills: ["Problem Solving", "Analysis", "Implementation"],
+        estimatedTime: "8-10 hours",
+      },
+      {
+        id: 3,
+        title: "Advanced Techniques",
+        description: "Master complex methodologies",
+        progress: 0,
+        completed: false,
+        skills: ["Innovation", "Optimization", "Research Methods"],
+        estimatedTime: "12-15 hours",
+      },
+      {
+        id: 4,
+        title: "Expert Specialization",
+        description: "Become a domain expert",
+        progress: 0,
+        completed: false,
+        skills: ["Leadership", "Original Contribution", "Thought Leadership"],
+        estimatedTime: "15-20 hours",
+      }
+    ];
+
+    // Update modules with user progress if available
+    if (user?.progress) {
+      const updatedModules = initialModules.map(module => {
+        const userProgress = user.progress.find(p => p.moduleId === module.id);
+        if (userProgress) {
+          return {
+            ...module,
+            progress: userProgress.progress,
+            completed: userProgress.completed
+          };
+        }
+        return module;
+      });
+      setModules(updatedModules);
+    } else {
+      setModules(initialModules);
     }
-  ]);
+  }, [user]);
+
+  const handleModuleAction = async (moduleId: number) => {
+    const moduleIndex = modules.findIndex(m => m.id === moduleId);
+    if (moduleIndex === -1) return;
+
+    const module = modules[moduleIndex];
+    const prevModule = moduleIndex > 0 ? modules[moduleIndex - 1] : null;
+
+    // Cannot start module if previous is not completed (except first module)
+    if (moduleIndex > 0 && !prevModule?.completed) {
+      toast({
+        title: "Module locked",
+        description: "Please complete the previous module first",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // If module is completed, allow review
+    if (module.completed) {
+      toast({
+        title: "Module Review",
+        description: `Reviewing ${module.title}`,
+      });
+      return;
+    }
+
+    // Update progress
+    const newProgress = Math.min(module.progress + 20, 100);
+    const completed = newProgress === 100;
+
+    // Update both local state and persist to auth context
+    const updatedModules = modules.map(m => 
+      m.id === moduleId 
+        ? { ...m, progress: newProgress, completed } 
+        : m
+    );
+
+    setModules(updatedModules);
+    updateProgress(moduleId, newProgress, completed);
+
+    if (completed) {
+      toast({
+        title: "Congratulations! 🎉",
+        description: `You've completed the ${module.title} module!`,
+      });
+    } else {
+      toast({
+        title: "Progress saved",
+        description: `${module.title}: ${newProgress}% complete`,
+      });
+    }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -105,6 +184,7 @@ export const LearningPath = () => {
                       : "bg-gray-200/70 text-gray-400 cursor-not-allowed"
                   }`}
                   disabled={!module.completed && !(index === 0 || modules[index - 1]?.completed)}
+                  onClick={() => handleModuleAction(module.id)}
                   title={
                     !module.completed && !(index === 0 || modules[index - 1]?.completed)
                       ? "Complete previous modules first"
