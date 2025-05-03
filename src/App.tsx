@@ -1,43 +1,64 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import './App.css';
-import { Toaster } from "@/components/ui/toaster"
-import { Dashboard } from "./pages/Dashboard";
-import { initFirebase } from "./lib/firebase-config";
-import { initProgressTracking } from "./lib/progress-tracker";
-import { initRecommendationEngine } from "./lib/recommendation-engine";
-import { initNotificationScheduler } from "./lib/notification-service";
-import { initAnalytics, syncOfflineEvents } from "./lib/analytics";
 
-// Initialize all services
-initFirebase();
-initProgressTracking();
-initRecommendationEngine();
-initAnalytics();
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "./contexts/AuthContext";
+import Index from "./pages/Index";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import NotFound from "./pages/NotFound";
+import { useAuth } from "./contexts/AuthContext";
+import { UserProfile } from "./components/UserProfile";
 
-// Set up notification scheduler
-const cleanup = initNotificationScheduler();
+const queryClient = new QueryClient();
 
-// Add dashboard to the routes
-function App() {
-  // Clean up notification scheduler on unmount
-  React.useEffect(() => {
-    syncOfflineEvents();
-    return () => {
-      cleanup();
-    };
-  }, []);
-  
-  // Return of App component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user } = useAuth();
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
+  return <>{children}</>;
+};
+
+const AppRoutes = () => {
+  const { user } = useAuth();
+
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        {/* Add more routes here as needed */}
-      </Routes>
-      <Toaster />
-    </Router>
+    <Routes>
+      <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
+      <Route path="/signup" element={user ? <Navigate to="/" /> : <Signup />} />
+      <Route path="/" element={
+        <ProtectedRoute>
+          <Index />
+        </ProtectedRoute>
+      } />
+      <Route path="/profile" element={
+        <ProtectedRoute>
+          <UserProfile />
+        </ProtectedRoute>
+      } />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
-}
+};
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <TooltipProvider>
+        <BrowserRouter>
+          <AuthProvider>
+            <Toaster />
+            <Sonner />
+            <AppRoutes />
+          </AuthProvider>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
+  </QueryClientProvider>
+);
 
 export default App;
