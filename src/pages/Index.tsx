@@ -1,6 +1,5 @@
 import { LearningPath } from "@/components/LearningPath";
 import { Leaderboard } from "@/components/Leaderboard";
-import { CourseChat } from "@/components/CourseChat";
 import { PersonalizedLearning } from "@/components/PersonalizedLearning";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { GlobalTour } from "@/components/GlobalTour";
@@ -10,6 +9,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { LearningAssistant } from "@/components/LearningAssistant";
 
 // Featured courses data
 const FEATURED_COURSES = [
@@ -68,18 +69,6 @@ const Index = () => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary-hover text-transparent bg-clip-text">Learning Path</h1>
                 <p className="text-sm text-muted-foreground">Welcome back, {user?.name}!</p>
               </div>
-              {/* Learning Assistant Bot Icon */}
-              <button
-                title="Open Learning Assistant"
-                className="ml-2 flex items-center justify-center rounded-full bg-primary/90 hover:bg-primary text-primary-foreground shadow p-2 transition-all"
-                onClick={() => {
-                  // Open the CourseChat (Learning Assistant) if not already open
-                  const chatBtn = document.querySelector('[aria-label="Open Learning Assistant"]') as HTMLElement;
-                  if (chatBtn) chatBtn.click();
-                }}
-              >
-                <Bot className="h-6 w-6" />
-              </button>
             </div>
             <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-8">
               <div className="relative w-full">
@@ -106,6 +95,14 @@ const Index = () => {
               >
                 {showPersonalized ? "Browse Courses" : "Personalize Learning"}
               </Button>
+              <Link to="/profile" className="text-muted-foreground hover:text-foreground">
+                <Button variant="ghost" size="icon" className="glass-btn-strong text-zinc-700 dark:text-white">
+                  <span className="sr-only">Profile</span>
+                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                    {user?.name?.[0] || "U"}
+                  </div>
+                </Button>
+              </Link>
               <button
                 onClick={logout}
                 className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm"
@@ -198,7 +195,8 @@ const Index = () => {
         )}
       </main>
       
-      <CourseChat />
+      {/* Learning Assistant (AI Chat) */}
+      <LearningAssistant />
       
       {/* Global Tour Component */}
       <GlobalTour />

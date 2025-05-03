@@ -1,7 +1,22 @@
+
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { User, AuthContextType } from "../types/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+
+export interface UserProfile {
+  name?: string;
+  bio?: string;
+  avatar?: string;
+  goal?: string;
+  notifications?: {
+    email: boolean;
+    push: boolean;
+    calendar: boolean;
+  };
+  visibility?: string;
+  weeklyTarget?: number;
+}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -52,6 +67,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const updateUserProfile = (profile: UserProfile) => {
+    if (!user) return;
+
+    setUser(currentUser => {
+      if (!currentUser) return null;
+      
+      return {
+        ...currentUser,
+        name: profile.name || currentUser.name,
+        profile: {
+          ...currentUser.profile,
+          ...profile
+        }
+      };
+    });
+
+    toast({
+      title: "Profile updated",
+      description: "Your profile information has been updated.",
+    });
+  };
+
   const login = async (email: string, password: string) => {
     try {
       setIsAuthenticating(true);
@@ -72,6 +109,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           { moduleId: 2, progress: 60, completed: false },
           { moduleId: 3, progress: 0, completed: false },
         ],
+        profile: {
+          bio: "Learning enthusiast",
+          avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format",
+          goal: "Improve current skills",
+          notifications: {
+            email: true,
+            push: true,
+            calendar: false
+          },
+          visibility: "public",
+          weeklyTarget: 5
+        }
       };
       setUser(mockUser);
       toast({
@@ -109,6 +158,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           { moduleId: 2, progress: 0, completed: false },
           { moduleId: 3, progress: 0, completed: false },
         ],
+        profile: {
+          bio: "",
+          avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format",
+          goal: "Personal interest",
+          notifications: {
+            email: true,
+            push: true,
+            calendar: false
+          },
+          visibility: "public",
+          weeklyTarget: 5
+        }
       };
       setUser(newUser);
       toast({
@@ -141,7 +202,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, updateProgress, isAuthenticating }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      signup, 
+      logout, 
+      updateProgress,
+      updateUserProfile, 
+      isAuthenticating 
+    }}>
       {children}
     </AuthContext.Provider>
   );
