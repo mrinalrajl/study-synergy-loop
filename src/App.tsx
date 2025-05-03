@@ -13,6 +13,7 @@ import NotFound from "./pages/NotFound";
 import { useAuth } from "./contexts/AuthContext";
 import { UserProfile } from "./components/UserProfile";
 import LearningDashboard from "./components/LearningDashboard";
+import { YouTubeLinkDetector } from "./components/YouTubeLinkDetector";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
           <AuthProvider>
             <Toaster />
             <Sonner />
+            <YouTubeLinkDetector />
             <AppRoutes />
           </AuthProvider>
         </BrowserRouter>
