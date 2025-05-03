@@ -20,7 +20,7 @@ import ResourceHub from "./ResourceHub";
 import TopicRecommendations from "./TopicRecommendations";
 import { Leaderboard } from "./Leaderboard";
 import { CourseChat } from "./CourseChat";
-import { fetchGemini } from "@/lib/geminiClient";
+import { fetchGroq } from "@/lib/groqClient";
 import { fetchUdemyFreeCourses } from "@/lib/udemyApi";
 
 // Learning durations for users to select
@@ -200,8 +200,8 @@ export const PersonalizedLearning = () => {
 
     try {
       const prompt = `Suggest a personalized learning path and 4 recommended courses for the following user preferences.\n\nTopic: ${topic}\nLevel: ${level}\nDuration: ${duration}\nGoal: ${goal}\n\nFormat the response as a numbered list of course titles with a short description for each.`;
-      const aiText = await fetchGemini(prompt);
-      console.log("Gemini raw response:", aiText); // Debug log
+      const aiText = await fetchGroq(prompt);
+      console.log("Groq raw response:", aiText); // Debug log
       const lines = aiText.split(/\n|\r/).filter(Boolean).slice(0, 4);
       setAiRecommendations(lines.length ? lines : fallbackCourses);
     } catch (err) {
