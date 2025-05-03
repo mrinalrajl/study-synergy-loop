@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { COURSE_CATEGORIES, LATEST_COURSES } from "@/utils/courseData";
 import { useToast } from "@/hooks/use-toast";
-import { fetchGemini } from "@/lib/geminiClient";
+import { fetchGroq } from "@/lib/groqClient";
 import { fetchUdemyFreeCourses } from "@/lib/udemyApi";
 
 type CourseType = {
@@ -55,8 +55,9 @@ export const CourseRecommendations = ({ onCourseSelect }: CourseRecommendationsP
     setAiCourses([]);
     try {
       const prompt = `Suggest 5 trending or highly recommended courses for the category: ${selectedCategory}. Format as a numbered list with course title and a short description.`;
-      const aiText = await fetchGemini(prompt);
-      console.log("Gemini raw response:", aiText); // Debug log
+      // Use Groq instead of Gemini
+      const aiText = await fetchGroq(prompt);
+      console.log("Groq raw response:", aiText); // Debug log
       const lines = aiText.split(/\n|\r/).filter(Boolean).slice(0, 5);
       setAiCourses(lines.length ? lines : fallbackCourses);
     } catch (err) {
@@ -77,7 +78,7 @@ export const CourseRecommendations = ({ onCourseSelect }: CourseRecommendationsP
       handleAIRecommend();
       toast({
         title: "AI Recommendations Enabled",
-        description: "Recommendations will be personalized using Gemini AI",
+        description: "Recommendations will be personalized using Groq AI",
       });
     }
   };

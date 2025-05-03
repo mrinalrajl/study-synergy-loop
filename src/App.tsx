@@ -11,7 +11,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./contexts/AuthContext";
-
+import { YouTubeLinkDetector } from "./components/YouTubeLinkDetector";
 const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -47,6 +47,7 @@ const App = () => (
           <AuthProvider>
             <Toaster />
             <Sonner />
+            <YouTubeLinkDetector />
             <AppRoutes />
           </AuthProvider>
         </BrowserRouter>

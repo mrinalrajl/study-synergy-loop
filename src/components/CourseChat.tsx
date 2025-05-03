@@ -10,7 +10,7 @@ import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { CourseRecommendations } from "@/components/CourseRecommendations";
 import { LEARNING_LEVELS, LEARNING_GOALS, COURSE_CATEGORIES } from "@/utils/courseData";
 import axios from "axios";
-import { fetchGemini } from "@/lib/geminiClient";
+import { fetchGroq } from "@/lib/groqClient";
 
 const ONBOARDING_STEPS = [
   {
@@ -185,47 +185,19 @@ Context:`;
 
     try {
       const personalizedMessage = generatePersonalizedPrompt(message);
-      // Use backend Gemini proxy
-      const aiResponse = await fetchGemini(personalizedMessage);
+      // Use Groq for AI completions
+      const aiResponse = await fetchGroq(personalizedMessage);
       const assistantMessage = {
         role: "assistant" as const,
         content: aiResponse,
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      try {
-        const openRouterRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${openRouterApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "openai/gpt-3.5-turbo",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "You are a helpful learning assistant that suggests personalized courses and helps users achieve their learning goals.",
-              },
-              ...messages,
-              { role: "user", content: generatePersonalizedPrompt(message) },
-            ],
-            max_tokens: 1000,
-            temperature: 0.7,
-          }),
-        });
-        if (!openRouterRes.ok) throw new Error("OpenRouter API failed");
-        const data = await openRouterRes.json();
-        const assistantMessage = { role: "assistant" as const, content: data.choices[0].message.content };
-        setMessages((prev) => [...prev, assistantMessage]);
-      } catch (secondError) {
-        toast({
-          title: "Error",
-          description: "All API attempts failed. Please try again later.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: "Groq API failed. Please try again later.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
