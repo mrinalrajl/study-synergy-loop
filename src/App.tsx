@@ -12,6 +12,7 @@ import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./contexts/AuthContext";
 import { UserProfile } from "./components/UserProfile";
+import LearningDashboard from "./components/LearningDashboard";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,11 @@ const AppRoutes = () => {
       <Route path="/profile" element={
         <ProtectedRoute>
           <UserProfile />
+        </ProtectedRoute>
+      } />
+      <Route path="/learning-dashboard" element={
+        <ProtectedRoute>
+          <LearningDashboard />
         </ProtectedRoute>
       } />
       <Route path="*" element={<NotFound />} />
