@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Send, MessageSquare, X, MinusCircle, MaximizeIcon, Sparkles } from "lucide-react";
+import { Bot, Send, X, MinusCircle, MaximizeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -96,7 +96,7 @@ export function LearningAssistant() {
         timestamp: new Date(),
       };
       
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages((prev: Message[]) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error getting response:", error);
       toast({
@@ -112,7 +112,7 @@ export function LearningAssistant() {
         timestamp: new Date(),
       };
       
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev: Message[]) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
