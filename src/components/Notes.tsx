@@ -1,15 +1,17 @@
+
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { marked } from "marked";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const Notes = () => {
-  const [note, setNote] = useState(() => localStorage.getItem("notes") || "");
+  const [note, setNote] = useLocalStorage("notes", "");
   const [editing, setEditing] = useState(false);
 
   const saveNote = () => {
-    localStorage.setItem("notes", note);
+    // No need to manually save to localStorage since useLocalStorage handles that
     setEditing(false);
   };
 
