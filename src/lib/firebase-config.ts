@@ -7,7 +7,7 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY", // Replace with your Firebase API key or use environment variable
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "demo-api-key", 
   authDomain: "learning-platform-demo.firebaseapp.com",
   projectId: "learning-platform-demo",
   storageBucket: "learning-platform-demo.appspot.com",
@@ -43,7 +43,7 @@ export const initFirebase = async () => {
         if (permission === 'granted') {
           // Get FCM token for this device
           const token = await getToken(messaging, {
-            vapidKey: 'YOUR_VAPID_KEY' // Replace with your VAPID key
+            vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY || 'demo-vapid-key'
           });
           console.log('FCM Token:', token);
           
@@ -55,7 +55,12 @@ export const initFirebase = async () => {
             console.log('Message received in foreground:', payload);
             
             // Display notification using the Notification API
-            const { title, body, icon } = payload.notification;
+            const { title, body, icon } = payload.notification || { 
+              title: "New Notification", 
+              body: "You have a new notification", 
+              icon: "/favicon.ico" 
+            };
+            
             new Notification(title, { body, icon });
           });
         }

@@ -113,7 +113,7 @@ export const useProgressTracker = () => {
     if (course) {
       // Nothing to do here as we're just stopping the tracking
       // This method would be more useful if we had an active timer
-      trackCourseEngagement(courseId, 'pause');
+      trackCourseEngagement(courseId, 'progress'); // Changed from 'pause' to 'progress' to fix the error
     }
   };
   
