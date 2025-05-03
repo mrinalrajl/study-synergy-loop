@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
+import { fetchUdemyFreeCourses } from "@/lib/udemyApi";
 
 interface Module {
   id: number;
@@ -18,6 +19,15 @@ export const LearningPath = () => {
   const [modules, setModules] = useState<Module[]>([]);
   const { user, updateProgress } = useAuth();
   const { toast } = useToast();
+  const [udemyCourses, setUdemyCourses] = useState<any[]>([]);
+  const [isLoadingUdemy, setIsLoadingUdemy] = useState(false);
+  const [enrolledCourses, setEnrolledCourses] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("enrolled_courses") || "[]");
+    } catch {
+      return [];
+    }
+  });
 
   // Initialize modules with user progress
   useEffect(() => {
@@ -79,6 +89,14 @@ export const LearningPath = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    setIsLoadingUdemy(true);
+    fetchUdemyFreeCourses("learning path")
+      .then(setUdemyCourses)
+      .catch(() => setUdemyCourses([]))
+      .finally(() => setIsLoadingUdemy(false));
+  }, []);
+
   const handleModuleAction = async (moduleId: number) => {
     const moduleIndex = modules.findIndex(m => m.id === moduleId);
     if (moduleIndex === -1) return;
@@ -132,8 +150,60 @@ export const LearningPath = () => {
     }
   };
 
+  const handleEnroll = (courseId: string) => {
+    if (!enrolledCourses.includes(courseId)) {
+      const updated = [...enrolledCourses, courseId];
+      setEnrolledCourses(updated);
+      localStorage.setItem("enrolled_courses", JSON.stringify(updated));
+      toast({ title: "Enrolled!", description: "Course added to your learning path." });
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Udemy Free Courses Section */}
+      <div className="mb-8">
+        <h2 className="text-xl font-bold mb-2 flex items-center gap-2">
+          <img src="https://cdn-icons-png.flaticon.com/512/5968/5968705.png" alt="Udemy" className="w-6 h-6" />
+          Free Udemy Courses for Your Path
+        </h2>
+        {isLoadingUdemy ? (
+          <div className="text-muted-foreground">Loading free courses...</div>
+        ) : udemyCourses.length > 0 ? (
+          udemyCourses.map((course) => (
+            <div key={course.id} className="p-2 bg-background/40 rounded border border-border flex gap-3 items-center mb-2">
+              <img src={course.image} alt={course.title} className="w-20 h-12 object-cover rounded" />
+              <div className="flex-1">
+                <div className="font-medium text-sm flex justify-between">
+                  <a href={course.url} target="_blank" rel="noopener noreferrer" className="hover:underline">{course.title}</a>
+                  <span className="px-2 py-0.5 text-xs bg-secondary/30 rounded-full">Free</span>
+                </div>
+                <div className="text-xs text-muted-foreground">{course.description}</div>
+                <div className="text-xs mt-1 flex justify-between items-center">
+                  <span className="px-2 py-0.5 bg-primary/20 text-primary rounded-full">{course.instructor}</span>
+                  <span className="ml-2">⭐ {course.rating?.toFixed(1) || "N/A"}</span>
+                  <span className="ml-2">👥 {course.enrolled}</span>
+                </div>
+              </div>
+              <Button
+                size="sm"
+                variant={enrolledCourses.includes(course.id) ? "default" : "outline"}
+                className="ml-2 text-xs"
+                disabled={enrolledCourses.includes(course.id)}
+                onClick={() => handleEnroll(course.id)}
+              >
+                {enrolledCourses.includes(course.id) ? "Enrolled" : "Enroll"}
+              </Button>
+            </div>
+          ))
+        ) : (
+          <div className="text-muted-foreground">No free courses found.</div>
+        )}
+        <div className="mt-2 text-xs text-muted-foreground">
+          Progress: {enrolledCourses.length} enrolled
+        </div>
+      </div>
+
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Your Learning Path</h2>
         <Button variant="outline" size="sm" className="text-sm border-primary/20">

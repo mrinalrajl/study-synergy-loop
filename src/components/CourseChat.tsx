@@ -10,6 +10,7 @@ import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { CourseRecommendations } from "@/components/CourseRecommendations";
 import { LEARNING_LEVELS, LEARNING_GOALS, COURSE_CATEGORIES } from "@/utils/courseData";
 import axios from "axios";
+import { fetchGemini } from "@/lib/geminiClient";
 
 const ONBOARDING_STEPS = [
   {
@@ -184,46 +185,13 @@ Context:`;
 
     try {
       const personalizedMessage = generatePersonalizedPrompt(message);
-
-      const response = await axios.post(
-        "https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=" + geminiApiKey,
-        {
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: personalizedMessage }],
-            },
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 1000,
-            topP: 0.8,
-            topK: 40,
-          },
-          safetySettings: [
-            {
-              category: "HARM_CATEGORY_HARASSMENT",
-              threshold: "BLOCK_MEDIUM_AND_ABOVE",
-            },
-          ],
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        const data = response.data;
-        const assistantMessage = {
-          role: "assistant" as const,
-          content: data.candidates[0].content.parts[0].text,
-        };
-        setMessages((prev) => [...prev, assistantMessage]);
-      } else {
-        throw new Error("Gemini API failed");
-      }
+      // Use backend Gemini proxy
+      const aiResponse = await fetchGemini(personalizedMessage);
+      const assistantMessage = {
+        role: "assistant" as const,
+        content: aiResponse,
+      };
+      setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       try {
         const openRouterRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {

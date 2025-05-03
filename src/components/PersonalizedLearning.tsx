@@ -20,6 +20,8 @@ import ResourceHub from "./ResourceHub";
 import TopicRecommendations from "./TopicRecommendations";
 import { Leaderboard } from "./Leaderboard";
 import { CourseChat } from "./CourseChat";
+import { fetchGemini } from "@/lib/geminiClient";
+import { fetchUdemyFreeCourses } from "@/lib/udemyApi";
 
 // Learning durations for users to select
 const LEARNING_DURATIONS = [
@@ -143,6 +145,24 @@ export const PersonalizedLearning = () => {
   const [showDemo, setShowDemo] = useState(false);
   const [demoStep, setDemoStep] = useState(0);
   const { toasts, showToast } = useAnimatedToaster();
+  const [aiRecommendations, setAiRecommendations] = useState<string[]>([]);
+  const [isLoadingAI, setIsLoadingAI] = useState(false);
+  const [udemyCourses, setUdemyCourses] = useState<any[]>([]);
+  const [isLoadingUdemy, setIsLoadingUdemy] = useState(false);
+  const [enrolledCourses, setEnrolledCourses] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("enrolled_courses") || "[]");
+    } catch {
+      return [];
+    }
+  });
+
+  const fallbackCourses = [
+    "1. Python for Beginners - Learn the basics of Python programming.",
+    "2. Data Science Essentials - Introduction to data analysis and visualization.",
+    "3. Web Development Bootcamp - Build modern websites and web apps.",
+    "4. AI Fundamentals - Understand the core concepts of artificial intelligence."
+  ];
 
   useEffect(() => {
     // Show demo for new users (no localStorage flag)
@@ -152,7 +172,17 @@ export const PersonalizedLearning = () => {
     }
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (showRecommendations && topic) {
+      setIsLoadingUdemy(true);
+      fetchUdemyFreeCourses(topic)
+        .then(setUdemyCourses)
+        .catch(() => setUdemyCourses([]))
+        .finally(() => setIsLoadingUdemy(false));
+    }
+  }, [showRecommendations, topic]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!topic) {
@@ -165,6 +195,25 @@ export const PersonalizedLearning = () => {
     }
 
     setShowRecommendations(true);
+    setIsLoadingAI(true);
+    setAiRecommendations([]);
+
+    try {
+      const prompt = `Suggest a personalized learning path and 4 recommended courses for the following user preferences.\n\nTopic: ${topic}\nLevel: ${level}\nDuration: ${duration}\nGoal: ${goal}\n\nFormat the response as a numbered list of course titles with a short description for each.`;
+      const aiText = await fetchGemini(prompt);
+      console.log("Gemini raw response:", aiText); // Debug log
+      const lines = aiText.split(/\n|\r/).filter(Boolean).slice(0, 4);
+      setAiRecommendations(lines.length ? lines : fallbackCourses);
+    } catch (err) {
+      toast({
+        title: "AI Error",
+        description: "Could not fetch AI recommendations.",
+        variant: "destructive",
+      });
+      setAiRecommendations(fallbackCourses);
+    } finally {
+      setIsLoadingAI(false);
+    }
 
     toast({
       title: "Personalizing your learning journey",
@@ -229,6 +278,15 @@ export const PersonalizedLearning = () => {
     });
     const audio = new Audio("/apple-notification.mp3");
     audio.play();
+  };
+
+  const handleEnroll = (courseId: string) => {
+    if (!enrolledCourses.includes(courseId)) {
+      const updated = [...enrolledCourses, courseId];
+      setEnrolledCourses(updated);
+      localStorage.setItem("enrolled_courses", JSON.stringify(updated));
+      toast({ title: "Enrolled!", description: "Course added to your learning path." });
+    }
   };
 
   return (
@@ -386,41 +444,63 @@ export const PersonalizedLearning = () => {
               <div>
                 <h3 className="text-lg font-medium mb-2 flex items-center">
                   <BookUser className="h-5 w-5 mr-2 text-primary" />
-                  Recommended Courses
+                  AI Recommended Courses
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[1, 2, 3, 4].map((_, i) => (
-                    <div
-                      key={i}
-                      className="p-4 bg-background/40 rounded-lg border border-border hover:border-primary/50 cursor-pointer transition-all duration-200 hover:bg-background/60"
-                      onClick={() => toast({
-                        title: "Course selected",
-                        description: "You've been enrolled in this course"
-                      })}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="font-medium">
-                          {topic} {i === 0 ? "Fundamentals" : i === 1 ? "Intermediate Concepts" : i === 2 ? "Advanced Techniques" : "Mastery"}
+                {isLoadingAI ? (
+                  <div className="text-muted-foreground">Loading AI recommendations...</div>
+                ) : aiRecommendations.length > 0 ? (
+                  <ul className="space-y-2">
+                    {aiRecommendations.map((rec, i) => (
+                      <li key={i} className="p-3 bg-background/40 rounded border border-border">
+                        {rec}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <div className="text-muted-foreground">No AI recommendations yet.</div>
+                )}
+              </div>
+              <div>
+                <h3 className="text-lg font-medium mb-2 flex items-center">
+                  <BookUser className="h-5 w-5 mr-2 text-primary" />
+                  Free Udemy Courses
+                </h3>
+                {isLoadingUdemy ? (
+                  <div className="text-muted-foreground">Loading free courses...</div>
+                ) : udemyCourses.length > 0 ? (
+                  udemyCourses.map((course) => (
+                    <div key={course.id} className="p-2 bg-background/40 rounded border border-border flex gap-3 items-center">
+                      <img src={course.image} alt={course.title} className="w-20 h-12 object-cover rounded" />
+                      <div className="flex-1">
+                        <div className="font-medium text-sm flex justify-between">
+                          <a href={course.url} target="_blank" rel="noopener noreferrer" className="hover:underline">{course.title}</a>
+                          <span className="px-2 py-0.5 text-xs bg-secondary/30 rounded-full">Free</span>
                         </div>
-                        <div className="flex items-center">
-                          <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-                          <span className="text-sm ml-1">{4 + i * 0.2}</span>
+                        <div className="text-xs text-muted-foreground">{course.description}</div>
+                        <div className="text-xs mt-1 flex justify-between items-center">
+                          <span className="px-2 py-0.5 bg-primary/20 text-primary rounded-full">{course.instructor}</span>
+                          <span className="ml-2">⭐ {course.rating?.toFixed(1) || "N/A"}</span>
+                          <span className="ml-2">👥 {course.enrolled}</span>
                         </div>
                       </div>
-                      <div className="text-sm text-muted-foreground mt-1">
-                        {i === 0 ? "Perfect for beginners" : i === 1 ? "Build on your fundamentals" : i === 2 ? "Deep dive into complex topics" : "Expert-level content"}
-                      </div>
-                      <div className="flex items-center mt-2">
-                        <Clock className="h-3 w-3 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground ml-1">
-                          {(i+1) * 4} hours • {level}
-                        </span>
-                      </div>
+                      <Button
+                        size="sm"
+                        variant={enrolledCourses.includes(course.id) ? "default" : "outline"}
+                        className="ml-2 text-xs"
+                        disabled={enrolledCourses.includes(course.id)}
+                        onClick={() => handleEnroll(course.id)}
+                      >
+                        {enrolledCourses.includes(course.id) ? "Enrolled" : "Enroll"}
+                      </Button>
                     </div>
-                  ))}
+                  ))
+                ) : (
+                  <div className="text-muted-foreground">No free courses found.</div>
+                )}
+                <div className="mt-2 text-xs text-muted-foreground">
+                  Progress: {enrolledCourses.length} enrolled
                 </div>
               </div>
-
               {goal === "Prepare for an interview" && (
                 <div>
                   <h3 className="text-lg font-medium mb-2 flex items-center">
