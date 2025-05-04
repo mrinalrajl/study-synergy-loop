@@ -15,8 +15,24 @@ import LearningDashboard from "./components/LearningDashboard";
 import InputAnimationDemoPage from "./pages/InputAnimationDemoPage";
 import { GroqLoadingIndicator } from "./components/GroqLoadingIndicator";
 import PrismBackground from "./components/PrismBackground";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
+
+// Add a class to the document for smooth theme transitions
+const ThemeTransitionRoot = () => {
+  useEffect(() => {
+    // Add transition class to html element for smoother theme changes
+    document.documentElement.classList.add('theme-transition');
+    
+    // Clean up function
+    return () => {
+      document.documentElement.classList.remove('theme-transition');
+    };
+  }, []);
+  
+  return null;
+};
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
@@ -57,10 +73,12 @@ const AppRoutes = () => {
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeTransitionRoot />
       <TooltipProvider>
         <BrowserRouter>
           <AuthProvider>
-            <PrismBackground intensity="low" addBodyClass={true} />
+            {/* Enhanced PrismBackground with medium intensity for better visual effect */}
+            <PrismBackground intensity="medium" addBodyClass={true} />
             <Toaster />
             <Sonner />
             <AppRoutes />

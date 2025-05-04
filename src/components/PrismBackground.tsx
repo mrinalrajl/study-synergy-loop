@@ -1,37 +1,17 @@
-import React, { useEffect } from 'react';
+import { useEffect } from "react";
 
-interface PrismBackgroundProps {
-  intensity?: 'low' | 'medium' | 'high';
-  addBodyClass?: boolean;
-}
-
-export function PrismBackground({ intensity = 'medium', addBodyClass = true }: PrismBackgroundProps) {
+export function PrismBackground() {
   useEffect(() => {
-    if (addBodyClass) {
-      document.body.classList.add("font-prism");
-      return () => document.body.classList.remove("font-prism");
-    }
-  }, [addBodyClass]);
-
-  // Adjust blur intensity based on prop
-  const getBlurIntensity = () => {
-    switch (intensity) {
-      case 'low': return 'blur-xl';
-      case 'high': return 'blur-3xl';
-      default: return 'blur-2xl';
-    }
-  };
-
+    document.body.classList.add("font-prism");
+    return () => document.body.classList.remove("font-prism");
+  }, []);
+  
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden font-prism pointer-events-none">
       <div className="absolute inset-0 bg-gradient-to-br from-[#e0e7ff] via-[#f0fdfa] to-[#f5d0fe] dark:from-[#18181b] dark:via-[#23272f] dark:to-[#0f172a] animate-gradient-move transition-colors duration-700" />
-      <div className={`absolute top-1/4 left-1/3 w-96 h-96 bg-[#a5b4fc]/40 dark:bg-[#334155]/40 rounded-full ${getBlurIntensity()} animate-bubble-move`} />
-      <div className={`absolute top-2/3 left-2/4 w-72 h-72 bg-[#fbcfe8]/40 dark:bg-[#64748b]/40 rounded-full ${intensity === 'high' ? 'blur-3xl' : 'blur-2xl'} animate-bubble-move2`} />
-      <div className={`absolute top-1/2 left-2/5 w-60 h-60 bg-[#99f6e4]/40 dark:bg-[#0ea5e9]/20 rounded-full ${intensity === 'low' ? 'blur-xl' : 'blur-2xl'} animate-bubble-move3`} />
-      {/* Sunlight blue effect on bubble */}
-      <div className="absolute top-1/4 left-1/3 w-96 h-96 rounded-full pointer-events-none">
-        <div className="absolute w-40 h-40 left-24 top-10 bg-gradient-to-br from-blue-300/60 via-white/40 to-transparent rounded-full blur-2xl opacity-70 animate-sunlight-glow dark:from-blue-500/20 dark:via-blue-800/10 dark:opacity-40" />
-      </div>
+      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-[#a5b4fc]/40 dark:bg-[#334155]/40 rounded-full blur-3xl animate-bubble-move" />
+      <div className="absolute top-2/3 left-2/4 w-72 h-72 bg-[#fbcfe8]/40 dark:bg-[#64748b]/40 rounded-full blur-2xl animate-bubble-move2" />
+      <div className="absolute top-1/2 left-2/5 w-60 h-60 bg-[#99f6e4]/40 dark:bg-[#0ea5e9]/20 rounded-full blur-2xl animate-bubble-move3" />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@500;700&display=swap');
         .font-prism {
@@ -66,12 +46,12 @@ export function PrismBackground({ intensity = 'medium', addBodyClass = true }: P
           0% { transform: translateY(0) scale(1); }
           100% { transform: translateY(-20px) scale(1.15); }
         }
-        .animate-sunlight-glow {
-          animation: sunlightGlow 6s ease-in-out infinite alternate;
+        .animate-fade-in-up {
+          animation: fadeInUp 1.2s cubic-bezier(.39,.575,.565,1) both;
         }
-        @keyframes sunlightGlow {
-          0% { opacity: 0.5; filter: blur(16px); }
-          100% { opacity: 1; filter: blur(32px); }
+        @keyframes fadeInUp {
+          0% { opacity: 0; transform: translateY(60px); }
+          100% { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </div>

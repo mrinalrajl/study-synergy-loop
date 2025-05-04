@@ -136,5 +136,53 @@ Email: abc@gmail.com
 Password: abc@gmail.com
 ```
 
+## Using the Devfile for Development
+
+This project includes a devfile.yaml that allows you to quickly set up a consistent development environment. The devfile defines all the necessary tools and commands to build and test the code as you generate it.
+
+### What is a Devfile?
+
+A devfile is a YAML configuration file that defines a portable development environment. It's designed to work with cloud development platforms like OpenShift DevSpaces, GitHub Codespaces, and other cloud IDEs.
+
+### Available Commands
+
+The devfile includes the following commands:
+
+- **install-dependencies**: Installs all project dependencies
+- **start-dev**: Starts the development server
+- **build**: Builds the production version of the application
+- **build-dev**: Builds the development version of the application
+- **lint**: Runs ESLint for code quality
+- **run-tests**: Runs all tests using Vitest
+- **build-server**: Builds the server components
+- **start-server**: Starts the server
+- **start-groq-server**: Starts the Groq proxy server
+
+### Using the Devfile
+
+1. **With a compatible IDE or platform**:
+   - Open the project in a devfile-compatible environment
+   - The environment will automatically configure based on the devfile.yaml
+
+2. **With OpenShift DevSpaces or CodeReady Workspaces**:
+   - Import the project
+   - The IDE will detect the devfile and set up the workspace
+
+3. **With GitHub Codespaces**:
+   - Open the repository in GitHub Codespaces
+   - The devfile will be used to configure the environment
+
+### Running Tests
+
+To run tests as you develop:
+
+```sh
+# Run all tests once
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
 ## About
-This project creafted with LoveableAI , Amazon Q , Groq Cloud. You can modify and extend it as needed for your own learning or development goals.
+This project crafted with LoveableAI, Amazon Q, Groq Cloud. You can modify and extend it as needed for your own learning or development goals.

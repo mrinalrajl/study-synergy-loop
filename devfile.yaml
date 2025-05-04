@@ -1,0 +1,109 @@
+schemaVersion: 2.2.0
+metadata:
+  name: study-synergy-loop
+  version: 1.0.0
+  displayName: Study Synergy Loop
+  description: A modern learning platform with personalized AI-powered course recommendations
+  tags:
+    - React
+    - TypeScript
+    - Vite
+    - Tailwind CSS
+    - shadcn-ui
+    - Groq
+
+components:
+  - name: development
+    container:
+      image: node:18
+      memoryLimit: 4Gi
+      mountSources: true
+      endpoints:
+        - name: web
+          targetPort: 5173
+          exposure: public
+        - name: groq-server
+          targetPort: 4001
+          exposure: public
+      env:
+        - name: NODE_ENV
+          value: development
+
+commands:
+  - id: install-dependencies
+    exec:
+      component: development
+      commandLine: npm install
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+        isDefault: true
+
+  - id: start-dev
+    exec:
+      component: development
+      commandLine: npm run dev
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+        isDefault: true
+
+  - id: build
+    exec:
+      component: development
+      commandLine: npm run build
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+
+  - id: build-dev
+    exec:
+      component: development
+      commandLine: npm run build:dev
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+
+  - id: lint
+    exec:
+      component: development
+      commandLine: npm run lint
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: test
+
+  - id: run-tests
+    exec:
+      component: development
+      commandLine: npx vitest run
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: test
+
+  - id: build-server
+    exec:
+      component: development
+      commandLine: npm run build:server
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: build
+
+  - id: start-server
+    exec:
+      component: development
+      commandLine: npm run start:server
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+
+  - id: start-groq-server
+    exec:
+      component: development
+      commandLine: npm run groq:server
+      workingDir: ${PROJECT_SOURCE}
+      group:
+        kind: run
+
+events:
+  postStart:
+    - install-dependencies
