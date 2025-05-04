@@ -14,9 +14,9 @@ if (!process.env.GROQ_API_KEY) {
   process.exit(1);
 }
 
-const groq = new Groq(process.env.GROQ_API_KEY);
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-app.post("/api/groq", async (req, res) => {
+app.post("/api/groq", async (req: express.Request, res: express.Response) => {
   try {
     const { prompt } = req.body;
     

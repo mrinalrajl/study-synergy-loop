@@ -235,7 +235,7 @@ export function Navbar({
         </div>
       )}
       
-      <style jsx>{`
+      <style>{`
         @keyframes fade-down {
           from { opacity: 0; transform: translateY(-10px); }
           to { opacity: 1; transform: translateY(0); }
