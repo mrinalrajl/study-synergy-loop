@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,11 +5,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { marked } from "marked";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useToast } from "@/hooks/use-toast";
+import emailjs from "emailjs-com";
 
 const Notes = () => {
   const [note, setNote] = useLocalStorage("notes", "");
   const [editing, setEditing] = useState(false);
+  const [email, setEmail] = useState("");
+  const [sending, setSending] = useState(false);
   const { toast } = useToast();
+
+  const validateEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
 
   const saveNote = () => {
     try {
@@ -30,6 +36,46 @@ const Notes = () => {
         description: "There was a problem saving your note. Please try again.",
         variant: "destructive",
       });
+    }
+  };
+
+  const sendNoteToEmail = async () => {
+    if (!email || !note.trim()) {
+      toast({
+        title: "Email required",
+        description: "Please enter your email and write a note before sending.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (!validateEmail(email)) {
+      toast({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setSending(true);
+    try {
+      await emailjs.send(
+        "service_qmxmdxj", // Your actual EmailJS service ID
+        "template_3vfln1d", // Your actual EmailJS template ID
+        { note, to_email: email }, // Use 'to_email' as the variable name
+        "u6z7NaFL0VxI_QWXR" // Your actual EmailJS public key
+      );
+      toast({
+        title: "Note sent!",
+        description: `Your note was sent to ${email}`,
+      });
+    } catch (error) {
+      toast({
+        title: "Send failed",
+        description: `Could not send note. Please try again. (${error?.text || error?.message || error})`,
+        variant: "destructive",
+      });
+    } finally {
+      setSending(false);
     }
   };
 
@@ -60,8 +106,19 @@ const Notes = () => {
             dangerouslySetInnerHTML={{ __html: marked(note || "*No notes yet.*") }}
             onError={handleRenderError}
           />
-          <Button size="sm" className="mt-2" onClick={() => setEditing(true)}>
+          <Button size="sm" className="mt-2 mr-2" onClick={() => setEditing(true)}>
             {note ? "Edit Note" : "Add Note"}
+          </Button>
+          <input
+            type="email"
+            className="border rounded px-2 py-1 text-sm mr-2"
+            placeholder="Your email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            style={{ width: 200 }}
+          />
+          <Button size="sm" onClick={sendNoteToEmail} disabled={sending}>
+            {sending ? "Sending..." : "Send Note to Email"}
           </Button>
         </div>
       )}

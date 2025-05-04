@@ -1,22 +1,7 @@
-
 import { createContext, useContext, useState, ReactNode, useEffect } from "react";
-import { User, AuthContextType } from "../types/auth";
+import { User, AuthContextType, UserProfile } from "../types/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
-
-export interface UserProfile {
-  name?: string;
-  bio?: string;
-  avatar?: string;
-  goal?: string;
-  notifications?: {
-    email: boolean;
-    push: boolean;
-    calendar: boolean;
-  };
-  visibility?: string;
-  weeklyTarget?: number;
-}
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -67,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const updateUserProfile = (profile: UserProfile) => {
+  const updateUserProfile = (profile: Partial<UserProfile>) => {
     if (!user) return;
 
     setUser(currentUser => {
@@ -113,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           bio: "Learning enthusiast",
           avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format",
           goal: "Improve current skills",
+          learningStyle: null, // Will be set after assessment
           notifications: {
             email: true,
             push: true,
@@ -162,6 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           bio: "",
           avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format",
           goal: "Personal interest",
+          learningStyle: null, // Will be set after assessment
           notifications: {
             email: true,
             push: true,

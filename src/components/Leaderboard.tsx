@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface User {
   id: number;
@@ -68,6 +69,47 @@ export const Leaderboard = () => {
     }
   };
 
+  // Animation variants
+  const buttonVariants = {
+    initial: { scale: 1 },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
+
+  const shareItemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    })
+  };
+
+  const dialogContentVariants = {
+    hidden: { opacity: 0, scale: 0.9, y: 10 },
+    visible: { 
+      opacity: 1, 
+      scale: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 25
+      }
+    },
+    exit: { 
+      opacity: 0, 
+      scale: 0.95,
+      transition: {
+        duration: 0.2
+      }
+    }
+  };
+
   return (
     <Card className="max-w-md mx-auto glass-container animate-fade-in">
       <CardHeader className="bg-primary rounded-t-xl shadow-md">
@@ -111,59 +153,133 @@ export const Leaderboard = () => {
         <div className="flex gap-2">
           <Dialog open={shareOpen} onOpenChange={setShareOpen}>
             <DialogTrigger asChild>
-              <button className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2 bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground">
+              <motion.button 
+                className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2 bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground"
+                variants={buttonVariants}
+                initial="initial"
+                whileHover="hover"
+                whileTap="tap"
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                data-motion="true"
+              >
                 <Share2 className="w-4 h-4" /> Share
-              </button>
+              </motion.button>
             </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Share this app</DialogTitle>
-              </DialogHeader>
-              <div className="flex flex-col gap-3 mt-2">
-                {shareLinks.map(link => (
-                  <a key={link.name} href={link.url} target="_blank" rel="noopener noreferrer">
-                    <Button className="w-full" variant="outline">Share on {link.name}</Button>
-                  </a>
-                ))}
-              </div>
-            </DialogContent>
+            <AnimatePresence>
+              {shareOpen && (
+                <DialogContent forceMount className="p-0 overflow-hidden">
+                  <motion.div
+                    variants={dialogContentVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="p-6"
+                  >
+                    <DialogHeader>
+                      <DialogTitle>Share this app</DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col gap-3 mt-2">
+                      {shareLinks.map((link, i) => (
+                        <motion.div
+                          key={link.name}
+                          custom={i}
+                          variants={shareItemVariants}
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          <a href={link.url} target="_blank" rel="noopener noreferrer">
+                            <Button 
+                              className="w-full" 
+                              variant="outline"
+                              asChild
+                            >
+                              <motion.div
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                              >
+                                Share on {link.name}
+                              </motion.div>
+                            </Button>
+                          </a>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </DialogContent>
+              )}
+            </AnimatePresence>
           </Dialog>
           <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
             <DialogTrigger asChild>
-              <button className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2 bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground">
+              <motion.button 
+                className="glass-btn-strong rounded-full px-4 py-2 text-sm shadow-md flex items-center gap-2 bg-primary text-primary-foreground dark:bg-primary dark:text-primary-foreground"
+                variants={buttonVariants}
+                initial="initial"
+                whileHover="hover"
+                whileTap="tap"
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                data-motion="true"
+              >
                 <User className="w-4 h-4" /> View Profile
-              </button>
+              </motion.button>
             </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Profile Details</DialogTitle>
-              </DialogHeader>
-              <div className="flex flex-col gap-3 mt-2">
-                <Input
-                  placeholder="Name"
-                  value={editProfile.name || ""}
-                  onChange={e => setEditProfile({ ...editProfile, name: e.target.value })}
-                />
-                <Input
-                  placeholder="Email"
-                  value={editProfile.email || ""}
-                  onChange={e => setEditProfile({ ...editProfile, email: e.target.value })}
-                />
-                <Input
-                  placeholder="Bio"
-                  value={editProfile.bio || ""}
-                  onChange={e => setEditProfile({ ...editProfile, bio: e.target.value })}
-                />
-                <Button onClick={handleProfileSave}>Save</Button>
-              </div>
-              {profile.name && (
-                <div className="mt-4 p-3 rounded bg-background/60">
-                  <div className="font-semibold">Name: {profile.name}</div>
-                  <div className="text-sm">Email: {profile.email}</div>
-                  <div className="text-sm">Bio: {profile.bio}</div>
-                </div>
+            <AnimatePresence>
+              {profileOpen && (
+                <DialogContent forceMount className="p-0 overflow-hidden">
+                  <motion.div
+                    variants={dialogContentVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className="p-6"
+                  >
+                    <DialogHeader>
+                      <DialogTitle>Profile Details</DialogTitle>
+                    </DialogHeader>
+                    <motion.div 
+                      className="flex flex-col gap-3 mt-2"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <Input
+                        placeholder="Name"
+                        value={editProfile.name || ""}
+                        onChange={e => setEditProfile({ ...editProfile, name: e.target.value })}
+                      />
+                      <Input
+                        placeholder="Email"
+                        value={editProfile.email || ""}
+                        onChange={e => setEditProfile({ ...editProfile, email: e.target.value })}
+                      />
+                      <Input
+                        placeholder="Bio"
+                        value={editProfile.bio || ""}
+                        onChange={e => setEditProfile({ ...editProfile, bio: e.target.value })}
+                      />
+                      <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <Button onClick={handleProfileSave} className="w-full">Save</Button>
+                      </motion.div>
+                    </motion.div>
+                    {profile.name && (
+                      <motion.div 
+                        className="mt-4 p-3 rounded bg-background/60"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                      >
+                        <div className="font-semibold">Name: {profile.name}</div>
+                        <div className="text-sm">Email: {profile.email}</div>
+                        <div className="text-sm">Bio: {profile.bio}</div>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                </DialogContent>
               )}
-            </DialogContent>
+            </AnimatePresence>
           </Dialog>
         </div>
       </CardFooter>

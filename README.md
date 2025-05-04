@@ -1,4 +1,44 @@
-# Welcome to your Lovable project
+# Study Synergy Loop
+
+A modern learning platform with personalized AI-powered course recommendations, free course suggestions, and productivity tools.
+
+## ✨ AI-Powered Features (Groq)
+
+- **Personalized Learning Path:**
+  - Enter your topic, experience, duration, and goal.
+  - Get a custom learning path and 4 AI-recommended courses, powered by Groq.
+  - No star ratings are shown for these AI recommendations—just clear, actionable suggestions.
+
+- **Free Udemy Course Suggestions:**
+  - Groq AI suggests 4 free Udemy courses for your chosen topic.
+  - Each course includes title, description, instructor, and star ratings for popularity and quality.
+  - Stars are shown based on the AI's assessment of course popularity and rating.
+
+## Running the Groq Server
+
+The application uses a Groq proxy server to handle AI-powered recommendations securely. Follow these steps to run the server:
+
+### Prerequisites
+1. Obtain a Groq API key from [Groq Cloud](https://console.groq.com)
+2. Set up your environment variable:
+```sh
+# Create a .env file in the root directory
+GROQ_API_KEY=your_api_key_here
+```
+
+### Starting the Server
+Run the Groq server using:
+```sh
+npm run groq:server
+```
+
+The server will start on port 4001 by default. You can modify the port by setting the `PORT` environment variable.
+
+### Server Details
+- **Endpoint**: POST `/api/groq`
+- **Port**: 4001 (default)
+- **CORS**: Enabled for cross-origin requests
+- **Authentication**: Requires Groq API key in environment variables
 
 ## Project info
 
@@ -52,13 +92,13 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
-
+This project is built with:
 - Vite
 - TypeScript
 - React
 - shadcn-ui
 - Tailwind CSS
+- Groq (for AI recommendations)
 
 ## How can I deploy this project?
 
@@ -68,7 +108,6 @@ Simply open [Lovable](https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650
 
 We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
 
-<<<<<<< HEAD
 ## 🍏 Apple-Inspired Animated Notifications
 
 This app uses a custom AnimatedToaster notification system with Framer Motion for beautiful, Mac-like bounce and pop effects. Notifications appear in the top-right with glassmorphism, shadow, and smooth transitions.
@@ -91,21 +130,59 @@ This app uses a custom AnimatedToaster notification system with Framer Motion fo
 - Animation CSS is in `src/index.css`.
 - Place the `<AnimatedToaster toasts={toasts} />` component at the root of your app.
 
----
-
-## This is a just sample with the LoveableAI
-This can be modified and then used again depending upon the need of the user based on the requirement and the prompt to create a new application and to maintain overall system.
-
-## Login Cred  
+## Sample Login Credentials
 ```sh
-Email:- abc@gmail.com
-password:- abc@gmail.com
+Email: abc@gmail.com
+Password: abc@gmail.com
 ```
 
-## Creating a RAG Bot for User
-This bot will help user to create a course suggestion and tries to encourage you with your learning
-=======
+## Using the Devfile for Development
 
-## This is a just sample with the LoveableAI
-This can be modified and then used again depending upon the need of the user based on the requirement and the prompt to create a new application and to maintain overall system.
->>>>>>> c416ebcb95e0303b3f1d41634320960d40f17a52
+This project includes a devfile.yaml that allows you to quickly set up a consistent development environment. The devfile defines all the necessary tools and commands to build and test the code as you generate it.
+
+### What is a Devfile?
+
+A devfile is a YAML configuration file that defines a portable development environment. It's designed to work with cloud development platforms like OpenShift DevSpaces, GitHub Codespaces, and other cloud IDEs.
+
+### Available Commands
+
+The devfile includes the following commands:
+
+- **install-dependencies**: Installs all project dependencies
+- **start-dev**: Starts the development server
+- **build**: Builds the production version of the application
+- **build-dev**: Builds the development version of the application
+- **lint**: Runs ESLint for code quality
+- **run-tests**: Runs all tests using Vitest
+- **build-server**: Builds the server components
+- **start-server**: Starts the server
+- **start-groq-server**: Starts the Groq proxy server
+
+### Using the Devfile
+
+1. **With a compatible IDE or platform**:
+   - Open the project in a devfile-compatible environment
+   - The environment will automatically configure based on the devfile.yaml
+
+2. **With OpenShift DevSpaces or CodeReady Workspaces**:
+   - Import the project
+   - The IDE will detect the devfile and set up the workspace
+
+3. **With GitHub Codespaces**:
+   - Open the repository in GitHub Codespaces
+   - The devfile will be used to configure the environment
+
+### Running Tests
+
+To run tests as you develop:
+
+```sh
+# Run all tests once
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+```
+
+## About
+This project crafted with LoveableAI, Amazon Q, Groq Cloud. You can modify and extend it as needed for your own learning or development goals.

@@ -52,8 +52,8 @@
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
 
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
@@ -483,4 +483,155 @@
     background-color: var(--primary);
     color: var(--primary-foreground);
   }
+  .dark .glass-container {
+    background: rgba(15, 23, 42, 0.15);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .dark .glass-container:hover {
+    background: rgba(15, 23, 42, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .dark .glass-btn {
+    @apply backdrop-blur-md bg-slate-800/50 hover:bg-slate-800/70;
+  }
+  
+  .dark .glass-btn-strong {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.3);
+  }
+  
+  .dark .glass-btn-strong:hover {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(99, 102, 241, 0.3);
+  }
+}
+/* Enhanced dark mode styles */
+.dark .glass-container {
+  background: rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+}
+
+.dark .glass-container:hover {
+  background: rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.dark .glass-btn {
+  backdrop-filter: blur(12px);
+  background-color: rgba(30, 41, 59, 0.5);
+}
+
+.dark .glass-btn:hover {
+  background-color: rgba(30, 41, 59, 0.7);
+}
+
+.dark .glass-btn-strong {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.3);
+}
+
+.dark .glass-btn-strong:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Dark mode specific background colors */
+.dark .bg-background\/50 {
+  background-color: rgba(15, 23, 42, 0.5);
+}
+
+.dark .bg-background\/60 {
+  background-color: rgba(15, 23, 42, 0.6);
+}
+
+.dark .bg-background\/70 {
+  background-color: rgba(15, 23, 42, 0.7);
+}
+
+.dark .bg-background\/80 {
+  background-color: rgba(15, 23, 42, 0.8);
+}
+
+.dark .bg-background\/90 {
+  background-color: rgba(15, 23, 42, 0.9);
+}
+
+/* Dark mode text and border colors */
+.dark .text-primary {
+  color: rgb(139, 92, 246);
+}
+
+.dark .bg-primary\/10 {
+  background-color: rgba(139, 92, 246, 0.1);
+}
+
+.dark .bg-primary\/20 {
+  background-color: rgba(139, 92, 246, 0.2);
+}
+
+.dark .border-primary\/10 {
+  border-color: rgba(139, 92, 246, 0.1);
+}
+
+.dark .border-primary\/20 {
+  border-color: rgba(139, 92, 246, 0.2);
+}
+
+.dark .border-primary\/30 {
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.dark .border-primary\/40 {
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+/* Improved text readability in dark mode */
+.dark .text-muted-foreground {
+  color: rgba(226, 232, 240, 0.8);
+}
+
+/* Dark mode card effects */
+.dark .card {
+  background-color: rgba(15, 23, 42, 0.6);
+  border-color: rgba(99, 102, 241, 0.1);
+}
+
+.dark .card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode specific animations */
+@keyframes darkGradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.dark .animate-gradient-move {
+  animation: darkGradientMove 20s ease infinite;
+  background-size: 300% 300%;
+}
+
+/* Dark mode glow effects */
+.dark .glow-effect {
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+}
+
+.dark .glow-text {
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+}
+
+/* Dark mode image overlays */
+.dark .image-overlay {
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent);
 }

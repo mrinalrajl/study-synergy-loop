@@ -1,0 +1,44 @@
+/* Theme transition styles for smooth theme changes */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced dark mode glass container styles */
+.dark .glass-container {
+  background: rgba(15, 23, 42, 0.15);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.5s ease;
+}
+
+.dark .glass-container:hover {
+  background: rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass-btn {
+  backdrop-filter: blur(12px);
+  background-color: rgba(30, 41, 59, 0.5);
+  transition: all 0.3s ease;
+}
+
+.dark .glass-btn:hover {
+  background-color: rgba(30, 41, 59, 0.7);
+}
+
+.dark .glass-btn-strong {
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(15, 23, 42, 0.3);
+  transition: all 0.3s ease;
+}
+
+.dark .glass-btn-strong:hover {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(99, 102, 241, 0.3);
+}

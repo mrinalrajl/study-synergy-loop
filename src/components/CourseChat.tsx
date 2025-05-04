@@ -10,7 +10,9 @@ import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { CourseRecommendations } from "@/components/CourseRecommendations";
 import { LEARNING_LEVELS, LEARNING_GOALS, COURSE_CATEGORIES } from "@/utils/courseData";
 import axios from "axios";
-import { fetchGemini } from "@/lib/geminiClient";
+import { fetchAI } from "@/lib/aiService";
+import { useGroqStore } from "@/lib/groqClient";
+import { GroqLoadingIndicator } from "@/components/GroqLoadingIndicator";
 
 const ONBOARDING_STEPS = [
   {
@@ -39,7 +41,7 @@ export const CourseChat = () => {
   const [message, setMessage] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [messages, setMessages] = useState<{ role: "user" | "assistant", content: string }[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useGroqStore();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [learningLevel, setLearningLevel] = useState("");
   const [learningGoal, setLearningGoal] = useState("");
@@ -168,7 +170,7 @@ Context:`;
       prompt += `\nLearning Goal: ${learningGoal}`;
     }
 
-    prompt += "\n\nPlease provide course recommendations and learning guidance based on this context.";
+    prompt += "\n\nPlease provide detailed course recommendations and comprehensive learning guidance based on this context. Make your response engaging, informative, and actionable with specific examples and clear structure.";
 
     return prompt;
   };
@@ -185,47 +187,19 @@ Context:`;
 
     try {
       const personalizedMessage = generatePersonalizedPrompt(message);
-      // Use backend Gemini proxy
-      const aiResponse = await fetchGemini(personalizedMessage);
+      // Use Groq for AI completions
+      const aiResponse = await fetchGroq(personalizedMessage);
       const assistantMessage = {
         role: "assistant" as const,
         content: aiResponse,
       };
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
-      try {
-        const openRouterRes = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${openRouterApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "openai/gpt-3.5-turbo",
-            messages: [
-              {
-                role: "system",
-                content:
-                  "You are a helpful learning assistant that suggests personalized courses and helps users achieve their learning goals.",
-              },
-              ...messages,
-              { role: "user", content: generatePersonalizedPrompt(message) },
-            ],
-            max_tokens: 1000,
-            temperature: 0.7,
-          }),
-        });
-        if (!openRouterRes.ok) throw new Error("OpenRouter API failed");
-        const data = await openRouterRes.json();
-        const assistantMessage = { role: "assistant" as const, content: data.choices[0].message.content };
-        setMessages((prev) => [...prev, assistantMessage]);
-      } catch (secondError) {
-        toast({
-          title: "Error",
-          description: "All API attempts failed. Please try again later.",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: "Groq API failed. Please try again later.",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }

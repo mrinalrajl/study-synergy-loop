@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { fetchGemini } from '@/lib/geminiClient';
+import { fetchGroq } from '@/lib/groqClient';
 import { fetchUdemyFreeCourses } from '@/lib/udemyApi';
 import { useToast } from './use-toast';
 
@@ -86,7 +86,7 @@ export function useSearch() {
       }. Please suggest 5 course titles and brief descriptions that would help me learn this topic effectively. Format as a numbered list with just the title and a one-sentence description for each.`;
 
       // Get AI recommendations
-      const aiResponse = await fetchGemini(prompt);
+      const aiResponse = await fetchGroq(prompt);
       
       // Parse the response into separate suggestions
       const suggestions = aiResponse
