@@ -10,7 +10,7 @@ import { Bell, CalendarClock, Mail, Star, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/contexts/AuthContext";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { Navbar } from "@/components/Navbar";
 
 const AVATARS = [
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format",
@@ -28,39 +28,6 @@ const LEARNING_GOALS = [
   "Academic research",
   "Personal interest"
 ];
-
-function Navbar() {
-  return (
-    <nav className="w-full bg-background/80 backdrop-blur border-b border-border/30 shadow-sm fixed top-0 left-0 z-50 font-prism">
-      <div className="max-w-3xl mx-auto flex items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={AVATARS[0]} alt="Logo" />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <span className="font-extrabold text-2xl tracking-tight text-primary bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-prism">Study Synergy Loop</span>
-        </div>
-        <div className="flex gap-6 items-center text-lg font-semibold font-prism">
-          <a href="/" className="hover:text-primary transition-colors">Home</a>
-          <a href="/learning-dashboard" className="hover:text-primary transition-colors">Dashboard</a>
-          <a href="/profile" className="text-primary font-bold">Profile</a>
-          <ThemeToggle />
-        </div>
-      </div>
-    </nav>
-  );
-}
-
-function PrismBackground() {
-  return (
-    <div className="fixed inset-0 -z-10 overflow-hidden font-prism">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#e0e7ff] via-[#f0fdfa] to-[#f5d0fe] animate-gradient-move" />
-      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-[#a5b4fc]/40 rounded-full blur-3xl animate-bubble-move" />
-      <div className="absolute top-2/3 left-2/4 w-72 h-72 bg-[#fbcfe8]/40 rounded-full blur-2xl animate-bubble-move2" />
-      <div className="absolute top-1/2 left-2/5 w-60 h-60 bg-[#99f6e4]/40 rounded-full blur-2xl animate-bubble-move3" />
-    </div>
-  );
-}
 
 export function UserProfile() {
   const { user, updateUserProfile } = useAuth();
@@ -103,8 +70,7 @@ export function UserProfile() {
 
   return (
     <div className="min-h-screen flex flex-col relative">
-      <PrismBackground />
-      <Navbar />
+      <Navbar variant="profile" />
       <div className="flex flex-1 items-center justify-center pt-32 pb-16">
         <Card className="w-full max-w-2xl mx-auto glass-container p-0 shadow-2xl border-none bg-white/80 backdrop-blur-xl animate-fade-in-up rounded-3xl transition-all duration-700">
           <CardHeader className="flex flex-col items-center gap-2 bg-white/70 rounded-t-3xl pt-12 pb-8 animate-fade-in">
@@ -267,5 +233,3 @@ export function UserProfile() {
     </div>
   );
 }
-
-export { Navbar };

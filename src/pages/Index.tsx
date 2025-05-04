@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LearningAssistant } from "@/components/LearningAssistant";
-import { Navbar } from "@/components/UserProfile";
+import { Navbar } from "@/components/Navbar";
 
 // Featured courses data
 const FEATURED_COURSES = [
@@ -72,7 +72,7 @@ const Index = () => {
   return (
     <div className="min-h-screen w-full relative font-prism">
       <PrismBackground />
-      <Navbar />
+      <Navbar variant="home" />
       <main className="w-full px-4 sm:px-6 lg:px-8 py-12 space-y-12 flex flex-col items-center justify-center min-h-[90vh]">
         {/* Header with glassmorphism effect */}
         <header className="bg-background/80 backdrop-blur-xl border-b border-primary/20 sticky top-0 z-10 w-full tour-header">
