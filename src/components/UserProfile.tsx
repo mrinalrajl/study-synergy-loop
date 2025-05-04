@@ -267,3 +267,5 @@ export function UserProfile() {
     </div>
   );
 }
+
+export { Navbar };
