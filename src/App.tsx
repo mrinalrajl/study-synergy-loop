@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -11,14 +10,9 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import NotFound from "./pages/NotFound";
 import { useAuth } from "./contexts/AuthContext";
-<<<<<<< HEAD
-import { YouTubeLinkDetector } from "./components/YouTubeLinkDetector";
-=======
 import { UserProfile } from "./components/UserProfile";
 import LearningDashboard from "./components/LearningDashboard";
-import { YouTubeLinkDetector } from "./components/YouTubeLinkDetector";
 
->>>>>>> 754d13306614192a559a6132d83296313f4b9f14
 const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -64,7 +58,6 @@ const App = () => (
           <AuthProvider>
             <Toaster />
             <Sonner />
-            <YouTubeLinkDetector />
             <AppRoutes />
           </AuthProvider>
         </BrowserRouter>

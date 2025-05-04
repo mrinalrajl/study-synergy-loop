@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -6,6 +5,8 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Mail, LockKeyhole, Eye, EyeOff, User } from "lucide-react";
+import emailjs from "emailjs-com";
+import { useLocalStorage } from "@/hooks/use-local-storage";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ const Signup = () => {
     message: ""
   });
   const { signup } = useAuth();
+  const [note] = useLocalStorage("notes", "");
 
   const calculatePasswordStrength = (value: string) => {
     let score = 0;
@@ -55,11 +57,26 @@ const Signup = () => {
     }
   }, [password]);
 
+  const sendNoteToEmail = async (email: string, note: string) => {
+    try {
+      await emailjs.send(
+        "service_xxx", // Replace with your EmailJS service ID
+        "template_xxx", // Replace with your EmailJS template ID
+        { note: note || "Welcome to Study Synergy Loop! Start taking notes and we'll send them to you here.", email },
+        "user_xxx" // Replace with your EmailJS user/public key
+      );
+    } catch (error) {
+      // Optionally handle error (e.g., show toast)
+      console.error("Failed to send email on signup", error);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
       await signup(email, name, password);
+      await sendNoteToEmail(email, note);
     } catch (error) {
       console.error(error);
     } finally {
