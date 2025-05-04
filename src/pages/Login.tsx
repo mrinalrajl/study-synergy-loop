@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthLayout } from "@/components/AuthLayout";
-import { Input } from "@/components/ui/input";
+import { AnimatedInput } from "@/components/ui/animated-input";
 import { Button } from "@/components/ui/button";
 import { Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
-import { Navbar } from "@/components/Navbar";
+import { useEffect } from "react";
 
 function PrismBackground() {
   useEffect(() => {
@@ -86,25 +86,24 @@ const Login = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative font-prism">
       <PrismBackground />
-      <Navbar variant="home" />
-      <div className="w-full max-w-2xl mx-auto glass-container bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl shadow-2xl p-14 animate-fade-in-up transition-all duration-700">
+      <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login">
         <AuthLayout 
           title="Welcome back" 
           subtitle="Enter your credentials to access your account"
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid grid-cols-1 gap-6">
               <div className="relative animate-fade-in [animation-delay:400ms]">
                 <div className="absolute left-3 top-3 text-muted-foreground">
-                  <Mail size={16} />
+                  <Mail size={18} />
                 </div>
-                <Input
+                <AnimatedInput
                   id="email"
                   type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 bg-background/50"
+                  className="pl-10 h-14 bg-background/50 text-lg"
                   required
                   autoComplete="email"
                   autoFocus
@@ -113,15 +112,15 @@ const Login = () => {
 
               <div className="relative animate-fade-in [animation-delay:600ms]">
                 <div className="absolute left-3 top-3 text-muted-foreground">
-                  <LockKeyhole size={16} />
+                  <LockKeyhole size={18} />
                 </div>
-                <Input
+                <AnimatedInput
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 h-12 bg-background/50"
+                  className="pl-10 pr-10 h-14 bg-background/50 text-lg"
                   required
                   autoComplete="current-password"
                 />
@@ -130,7 +129,7 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                 </button>
               </div>
             </div>
@@ -139,29 +138,29 @@ const Login = () => {
               <label className="flex items-center space-x-2 cursor-pointer">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  className="h-5 w-5 rounded border-gray-300 text-primary focus:ring-primary"
                 />
-                <span className="text-sm text-muted-foreground">Remember me</span>
+                <span className="text-base text-muted-foreground">Remember me</span>
               </label>
               <Link
                 to="/forgot-password"
-                className="text-sm font-medium text-primary hover:text-primary-hover transition-colors"
+                className="text-base font-medium text-primary hover:text-primary-hover transition-colors"
               >
                 Forgot password?
               </Link>
             </div>
 
-            <div className="pt-2 animate-fade-in [animation-delay:1000ms]">
+            <div className="pt-4 animate-fade-in [animation-delay:1000ms]">
               <Button
                 type="submit"
-                className="w-full h-12 text-base font-medium glass-btn-strong"
+                className="w-full h-14 text-lg font-medium glass-btn-strong"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign in"}
               </Button>
             </div>
 
-            <p className="text-center text-sm text-muted-foreground animate-fade-in [animation-delay:1200ms]">
+            <p className="text-center text-base text-muted-foreground animate-fade-in [animation-delay:1200ms]">
               Don't have an account?{" "}
               <Link
                 to="/signup"
@@ -173,6 +172,15 @@ const Login = () => {
           </form>
         </AuthLayout>
       </div>
+      <style>{`
+        @keyframes easeInLogin {
+          0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-ease-in-login {
+          animation: easeInLogin 1s cubic-bezier(.39,.575,.565,1) both;
+        }
+      `}</style>
     </div>
   );
 };

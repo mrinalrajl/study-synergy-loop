@@ -20,7 +20,7 @@ import ResourceHub from "./ResourceHub";
 import TopicRecommendations from "./TopicRecommendations";
 import { Leaderboard } from "./Leaderboard";
 import { CourseChat } from "./CourseChat";
-import { fetchGroq } from "@/lib/groqClient";
+import { fetchGroq, useGroqStore } from "@/lib/groqClient";
 
 // Learning durations for users to select
 const LEARNING_DURATIONS = [

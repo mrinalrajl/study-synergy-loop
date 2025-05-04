@@ -12,6 +12,8 @@ import NotFound from "./pages/NotFound";
 import { useAuth } from "./contexts/AuthContext";
 import { UserProfile } from "./components/UserProfile";
 import LearningDashboard from "./components/LearningDashboard";
+import InputAnimationDemoPage from "./pages/InputAnimationDemoPage";
+import { GroqLoadingIndicator } from "./components/GroqLoadingIndicator";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +47,7 @@ const AppRoutes = () => {
           <LearningDashboard />
         </ProtectedRoute>
       } />
+      <Route path="/input-animation-demo" element={<InputAnimationDemoPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -59,6 +62,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <AppRoutes />
+            <GroqLoadingIndicator variant="overlay" text="Groq is processing your request..." />
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

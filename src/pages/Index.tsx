@@ -1,17 +1,15 @@
 import { LearningPath } from "@/components/LearningPath";
 import { Leaderboard } from "@/components/Leaderboard";
 import { PersonalizedLearning } from "@/components/PersonalizedLearning";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { GlobalTour } from "@/components/GlobalTour";
 import { useAuth } from "@/contexts/AuthContext";
-import { BookOpen, LogOut, Search, Star, BookUser, Bell, Bot } from "lucide-react";
+import { Star } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { LearningAssistant } from "@/components/LearningAssistant";
 import { Navbar } from "@/components/Navbar";
+import { useToast } from "@/hooks/use-toast";
 
 // Featured courses data
 const FEATURED_COURSES = [
@@ -64,87 +62,36 @@ const Index = () => {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [showPersonalized, setShowPersonalized] = useState(false);
+  const [hasDuplicates, setHasDuplicates] = useState(true);
+  const { toast } = useToast();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
   };
 
+  const handleRemoveDuplicates = () => {
+    // Simulate removing duplicates
+    setHasDuplicates(false);
+    toast({
+      title: "Duplicates Removed",
+      description: "All duplicate items have been successfully removed.",
+    });
+  };
+
   return (
     <div className="min-h-screen w-full relative font-prism">
       <PrismBackground />
-      <Navbar variant="home" />
-      <main className="w-full px-4 sm:px-6 lg:px-8 py-12 space-y-12 flex flex-col items-center justify-center min-h-[90vh]">
-        {/* Header with glassmorphism effect */}
-        <header className="bg-background/80 backdrop-blur-xl border-b border-primary/20 sticky top-0 z-10 w-full tour-header">
-          <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <BookUser className="h-8 w-8 text-primary" />
-                <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary-hover text-transparent bg-clip-text">Learning Path</h1>
-                  <p className="text-sm text-muted-foreground">Welcome back, {user?.name}!</p>
-                </div>
-              </div>
-              <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-8">
-                <div className="relative w-full">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input 
-                    type="text" 
-                    placeholder="Search for courses..." 
-                    className="pl-10 bg-background/50 border-primary/10 focus:border-primary/30"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                  />
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <Button variant="ghost" size="icon" className="relative glass-btn-strong text-zinc-700 dark:text-white">
-                  <Bell className="h-5 w-5" />
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
-                </Button>
-                <ThemeToggle />
-                <Button 
-                  className="glass-btn-strong text-zinc-700 dark:text-white"
-                  title="Begin your learning journey"
-                  onClick={() => setShowPersonalized(!showPersonalized)}
-                >
-                  {showPersonalized ? "Browse Courses" : "Personalize Learning"}
-                </Button>
-                <Link to="/profile" className="text-muted-foreground hover:text-foreground">
-                  <Button variant="ghost" size="icon" className="glass-btn-strong text-zinc-700 dark:text-white">
-                    <span className="sr-only">Profile</span>
-                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                      {user?.name?.[0] || "U"}
-                    </div>
-                  </Button>
-                </Link>
-                <button
-                  onClick={logout}
-                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm"
-                  title="Sign out"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Sign out</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-        
-        {/* Mobile search - only visible on small screens */}
-        <div className="md:hidden p-4 bg-background/30">
-          <div className="relative w-full">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              type="text" 
-              placeholder="Search for courses..." 
-              className="pl-10 bg-background/50 border-primary/10 focus:border-primary/30"
-              value={searchQuery}
-              onChange={handleSearchChange}
-            />
-          </div>
-        </div>
-        
+      <Navbar 
+        variant="home" 
+        user={user}
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        showPersonalized={showPersonalized}
+        togglePersonalized={() => setShowPersonalized(!showPersonalized)}
+        logout={logout}
+        removeDuplicates={hasDuplicates ? handleRemoveDuplicates : undefined}
+      />
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-12 space-y-12 flex flex-col items-center justify-center min-h-[90vh] mt-24">
         {showPersonalized ? (
           <PersonalizedLearning />
         ) : (

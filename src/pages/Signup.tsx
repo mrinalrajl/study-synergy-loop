@@ -2,12 +2,11 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { AuthLayout } from "@/components/AuthLayout";
-import { Input } from "@/components/ui/input";
+import { AnimatedInput } from "@/components/ui/animated-input";
 import { Button } from "@/components/ui/button";
 import { Mail, LockKeyhole, Eye, EyeOff, User } from "lucide-react";
 import emailjs from "emailjs-com";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { Navbar } from "@/components/Navbar";
 
 function PrismBackground() {
   useEffect(() => {
@@ -160,25 +159,24 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative font-prism">
       <PrismBackground />
-      <Navbar variant="home" />
-      <div className="w-full max-w-2xl mx-auto glass-container bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl rounded-3xl shadow-2xl p-14 animate-fade-in-up transition-all duration-700">
+      <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login">
         <AuthLayout 
           title="Create account" 
           subtitle="Join us to start your learning journey"
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="relative animate-fade-in [animation-delay:400ms]">
                 <div className="absolute left-3 top-3 text-muted-foreground">
-                  <User size={16} />
+                  <User size={18} />
                 </div>
-                <Input
+                <AnimatedInput
                   id="name"
                   type="text"
                   placeholder="Full name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10 h-12 bg-background/50"
+                  className="pl-10 h-14 bg-background/50 text-lg"
                   required
                   autoComplete="name"
                   autoFocus
@@ -187,32 +185,32 @@ const Signup = () => {
 
               <div className="relative animate-fade-in [animation-delay:600ms]">
                 <div className="absolute left-3 top-3 text-muted-foreground">
-                  <Mail size={16} />
+                  <Mail size={18} />
                 </div>
-                <Input
+                <AnimatedInput
                   id="email"
                   type="email"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 h-12 bg-background/50"
+                  className="pl-10 h-14 bg-background/50 text-lg"
                   required
                   autoComplete="email"
                 />
               </div>
 
-              <div className="space-y-2 animate-fade-in [animation-delay:800ms]">
+              <div className="space-y-2 animate-fade-in [animation-delay:800ms] md:col-span-2">
                 <div className="relative">
                   <div className="absolute left-3 top-3 text-muted-foreground">
-                    <LockKeyhole size={16} />
+                    <LockKeyhole size={18} />
                   </div>
-                  <Input
+                  <AnimatedInput
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 h-12 bg-background/50"
+                    className="pl-10 pr-10 h-14 bg-background/50 text-lg"
                     required
                     autoComplete="new-password"
                   />
@@ -221,19 +219,19 @@ const Signup = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
                 
                 {password && (
                   <div className="space-y-2">
-                    <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
                       <div 
                         className={`h-full transition-all duration-300 ${getPasswordStrengthColor()}`}
                         style={{ width: `${(passwordStrength.score / 4) * 100}%` }}
                       />
                     </div>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-base text-muted-foreground">
                       Password strength: {passwordStrength.message}
                     </p>
                   </div>
@@ -241,17 +239,17 @@ const Signup = () => {
               </div>
             </div>
 
-            <div className="pt-2 animate-fade-in [animation-delay:1000ms]">
+            <div className="pt-4 animate-fade-in [animation-delay:1000ms]">
               <Button
                 type="submit"
-                className="w-full h-12 text-base font-medium glass-btn-strong"
+                className="w-full h-14 text-lg font-medium glass-btn-strong"
                 disabled={isLoading || passwordStrength.score < 3}
               >
                 {isLoading ? "Creating account..." : "Create account"}
               </Button>
             </div>
 
-            <p className="text-center text-sm text-muted-foreground animate-fade-in [animation-delay:1200ms]">
+            <p className="text-center text-base text-muted-foreground animate-fade-in [animation-delay:1200ms]">
               Already have an account?{" "}
               <Link
                 to="/login"
@@ -263,6 +261,15 @@ const Signup = () => {
           </form>
         </AuthLayout>
       </div>
+      <style>{`
+        @keyframes easeInLogin {
+          0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-ease-in-login {
+          animation: easeInLogin 1s cubic-bezier(.39,.575,.565,1) both;
+        }
+      `}</style>
     </div>
   );
 };

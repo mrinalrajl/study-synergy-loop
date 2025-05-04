@@ -2,8 +2,6 @@
 
 A modern learning platform with personalized AI-powered course recommendations, free course suggestions, and productivity tools.
 
----
-
 ## ✨ AI-Powered Features (Groq)
 
 - **Personalized Learning Path:**
@@ -16,7 +14,31 @@ A modern learning platform with personalized AI-powered course recommendations, 
   - Each course includes title, description, instructor, and star ratings for popularity and quality.
   - Stars are shown based on the AI's assessment of course popularity and rating.
 
----
+## Running the Groq Server
+
+The application uses a Groq proxy server to handle AI-powered recommendations securely. Follow these steps to run the server:
+
+### Prerequisites
+1. Obtain a Groq API key from [Groq Cloud](https://console.groq.com)
+2. Set up your environment variable:
+```sh
+# Create a .env file in the root directory
+GROQ_API_KEY=your_api_key_here
+```
+
+### Starting the Server
+Run the Groq server using:
+```sh
+npm run groq:server
+```
+
+The server will start on port 4001 by default. You can modify the port by setting the `PORT` environment variable.
+
+### Server Details
+- **Endpoint**: POST `/api/groq`
+- **Port**: 4001 (default)
+- **CORS**: Enabled for cross-origin requests
+- **Authentication**: Requires Groq API key in environment variables
 
 ## Project info
 
@@ -108,8 +130,6 @@ This app uses a custom AnimatedToaster notification system with Framer Motion fo
 - Animation CSS is in `src/index.css`.
 - Place the `<AnimatedToaster toasts={toasts} />` component at the root of your app.
 
----
-
 ## Sample Login Credentials
 ```sh
 Email: abc@gmail.com
@@ -117,6 +137,4 @@ Password: abc@gmail.com
 ```
 
 ## About
-This project is a sample created with LoveableAI. You can modify and extend it as needed for your own learning or development goals.
-
----
+This project creafted with LoveableAI , Amazon Q , Groq Cloud. You can modify and extend it as needed for your own learning or development goals.

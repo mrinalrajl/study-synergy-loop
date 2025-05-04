@@ -10,7 +10,8 @@ import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { CourseRecommendations } from "@/components/CourseRecommendations";
 import { LEARNING_LEVELS, LEARNING_GOALS, COURSE_CATEGORIES } from "@/utils/courseData";
 import axios from "axios";
-import { fetchGroq } from "@/lib/groqClient";
+import { fetchGroq, useGroqStore } from "@/lib/groqClient";
+import { GroqLoadingIndicator } from "@/components/GroqLoadingIndicator";
 
 const ONBOARDING_STEPS = [
   {
@@ -39,7 +40,7 @@ export const CourseChat = () => {
   const [message, setMessage] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [messages, setMessages] = useState<{ role: "user" | "assistant", content: string }[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const { isLoading } = useGroqStore();
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [learningLevel, setLearningLevel] = useState("");
   const [learningGoal, setLearningGoal] = useState("");
