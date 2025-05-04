@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { LearningAssistant } from "@/components/LearningAssistant";
+import { Navbar } from "@/components/UserProfile";
 
 // Featured courses data
 const FEATURED_COURSES = [
@@ -48,6 +49,17 @@ const FEATURED_COURSES = [
   }
 ];
 
+function PrismBackground() {
+  return (
+    <div className="fixed inset-0 -z-10 overflow-hidden font-prism">
+      <div className="absolute inset-0 bg-gradient-to-br from-[#e0e7ff] via-[#f0fdfa] to-[#f5d0fe] animate-gradient-move" />
+      <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-[#a5b4fc]/40 rounded-full blur-3xl animate-bubble-move" />
+      <div className="absolute top-2/3 left-2/4 w-72 h-72 bg-[#fbcfe8]/40 rounded-full blur-2xl animate-bubble-move2" />
+      <div className="absolute top-1/2 left-2/5 w-60 h-60 bg-[#99f6e4]/40 rounded-full blur-2xl animate-bubble-move3" />
+    </div>
+  );
+}
+
 const Index = () => {
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -58,79 +70,81 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-background">
-      {/* Header with glassmorphism effect */}
-      <header className="bg-background/80 backdrop-blur-xl border-b border-primary/20 sticky top-0 z-10 w-full tour-header">
-        <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <BookUser className="h-8 w-8 text-primary" />
-              <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary-hover text-transparent bg-clip-text">Learning Path</h1>
-                <p className="text-sm text-muted-foreground">Welcome back, {user?.name}!</p>
+    <div className="min-h-screen w-full relative font-prism">
+      <PrismBackground />
+      <Navbar />
+      <main className="w-full px-4 sm:px-6 lg:px-8 py-12 space-y-12 flex flex-col items-center justify-center min-h-[90vh]">
+        {/* Header with glassmorphism effect */}
+        <header className="bg-background/80 backdrop-blur-xl border-b border-primary/20 sticky top-0 z-10 w-full tour-header">
+          <div className="w-full px-4 sm:px-6 lg:px-8 py-4">
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <BookUser className="h-8 w-8 text-primary" />
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary-hover text-transparent bg-clip-text">Learning Path</h1>
+                  <p className="text-sm text-muted-foreground">Welcome back, {user?.name}!</p>
+                </div>
               </div>
-            </div>
-            <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-8">
-              <div className="relative w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  type="text" 
-                  placeholder="Search for courses..." 
-                  className="pl-10 bg-background/50 border-primary/10 focus:border-primary/30"
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                />
+              <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-8">
+                <div className="relative w-full">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input 
+                    type="text" 
+                    placeholder="Search for courses..." 
+                    className="pl-10 bg-background/50 border-primary/10 focus:border-primary/30"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" className="relative glass-btn-strong text-zinc-700 dark:text-white">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
-              </Button>
-              <ThemeToggle />
-              <Button 
-                className="glass-btn-strong text-zinc-700 dark:text-white"
-                title="Begin your learning journey"
-                onClick={() => setShowPersonalized(!showPersonalized)}
-              >
-                {showPersonalized ? "Browse Courses" : "Personalize Learning"}
-              </Button>
-              <Link to="/profile" className="text-muted-foreground hover:text-foreground">
-                <Button variant="ghost" size="icon" className="glass-btn-strong text-zinc-700 dark:text-white">
-                  <span className="sr-only">Profile</span>
-                  <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                    {user?.name?.[0] || "U"}
-                  </div>
+              <div className="flex items-center gap-3">
+                <Button variant="ghost" size="icon" className="relative glass-btn-strong text-zinc-700 dark:text-white">
+                  <Bell className="h-5 w-5" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-primary rounded-full"></span>
                 </Button>
-              </Link>
-              <button
-                onClick={logout}
-                className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm"
-                title="Sign out"
-              >
-                <LogOut className="w-4 h-4" />
-                <span className="hidden sm:inline">Sign out</span>
-              </button>
+                <ThemeToggle />
+                <Button 
+                  className="glass-btn-strong text-zinc-700 dark:text-white"
+                  title="Begin your learning journey"
+                  onClick={() => setShowPersonalized(!showPersonalized)}
+                >
+                  {showPersonalized ? "Browse Courses" : "Personalize Learning"}
+                </Button>
+                <Link to="/profile" className="text-muted-foreground hover:text-foreground">
+                  <Button variant="ghost" size="icon" className="glass-btn-strong text-zinc-700 dark:text-white">
+                    <span className="sr-only">Profile</span>
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                      {user?.name?.[0] || "U"}
+                    </div>
+                  </Button>
+                </Link>
+                <button
+                  onClick={logout}
+                  className="flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm"
+                  title="Sign out"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">Sign out</span>
+                </button>
+              </div>
             </div>
           </div>
+        </header>
+        
+        {/* Mobile search - only visible on small screens */}
+        <div className="md:hidden p-4 bg-background/30">
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input 
+              type="text" 
+              placeholder="Search for courses..." 
+              className="pl-10 bg-background/50 border-primary/10 focus:border-primary/30"
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+          </div>
         </div>
-      </header>
-      
-      {/* Mobile search - only visible on small screens */}
-      <div className="md:hidden p-4 bg-background/30">
-        <div className="relative w-full">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input 
-            type="text" 
-            placeholder="Search for courses..." 
-            className="pl-10 bg-background/50 border-primary/10 focus:border-primary/30"
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-        </div>
-      </div>
-      
-      <main className="w-full px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+        
         {showPersonalized ? (
           <PersonalizedLearning />
         ) : (
@@ -194,12 +208,43 @@ const Index = () => {
           </>
         )}
       </main>
-      
-      {/* Learning Assistant (AI Chat) */}
       <LearningAssistant />
-      
-      {/* Global Tour Component */}
       <GlobalTour />
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Quicksand:wght@500;700&display=swap');
+        .font-prism {
+          font-family: 'Montserrat', 'Quicksand', 'Segoe UI', 'Arial', sans-serif;
+          letter-spacing: 0.01em;
+        }
+        .animate-gradient-move {
+          animation: gradientMove 16s cubic-bezier(.4,0,.2,1) infinite alternate;
+        }
+        @keyframes gradientMove {
+          0% { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
+        .animate-bubble-move {
+          animation: bubbleMove 12s cubic-bezier(.4,0,.2,1) infinite alternate;
+        }
+        @keyframes bubbleMove {
+          0% { transform: translateY(0) scale(1); }
+          100% { transform: translateY(-40px) scale(1.13); }
+        }
+        .animate-bubble-move2 {
+          animation: bubbleMove2 18s cubic-bezier(.4,0,.2,1) infinite alternate;
+        }
+        @keyframes bubbleMove2 {
+          0% { transform: translateY(0) scale(1); }
+          100% { transform: translateY(30px) scale(1.11); }
+        }
+        .animate-bubble-move3 {
+          animation: bubbleMove3 22s cubic-bezier(.4,0,.2,1) infinite alternate;
+        }
+        @keyframes bubbleMove3 {
+          0% { transform: translateY(0) scale(1); }
+          100% { transform: translateY(-20px) scale(1.15); }
+        }
+      `}</style>
     </div>
   );
 };

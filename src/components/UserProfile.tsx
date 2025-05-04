@@ -10,6 +10,7 @@ import { Bell, CalendarClock, Mail, Star, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/contexts/AuthContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const AVATARS = [
   "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=64&h=64&fit=crop&auto=format",
@@ -30,19 +31,20 @@ const LEARNING_GOALS = [
 
 function Navbar() {
   return (
-    <nav className="w-full bg-background/80 backdrop-blur border-b border-border/30 shadow-sm fixed top-0 left-0 z-50">
+    <nav className="w-full bg-background/80 backdrop-blur border-b border-border/30 shadow-sm fixed top-0 left-0 z-50 font-prism">
       <div className="max-w-3xl mx-auto flex items-center justify-between px-6 py-3">
         <div className="flex items-center gap-2">
           <Avatar className="h-8 w-8">
             <AvatarImage src={AVATARS[0]} alt="Logo" />
             <AvatarFallback>U</AvatarFallback>
           </Avatar>
-          <span className="font-bold text-lg tracking-tight text-primary">Study Synergy Loop</span>
+          <span className="font-extrabold text-2xl tracking-tight text-primary bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent font-prism">Study Synergy Loop</span>
         </div>
-        <div className="flex gap-4 text-sm">
+        <div className="flex gap-6 items-center text-lg font-semibold font-prism">
           <a href="/" className="hover:text-primary transition-colors">Home</a>
           <a href="/learning-dashboard" className="hover:text-primary transition-colors">Dashboard</a>
-          <a href="/profile" className="text-primary font-semibold">Profile</a>
+          <a href="/profile" className="text-primary font-bold">Profile</a>
+          <ThemeToggle />
         </div>
       </div>
     </nav>
