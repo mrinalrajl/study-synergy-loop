@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Send, X, MinusCircle, MaximizeIcon } from "lucide-react";
@@ -7,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { fetchGemini, getGeminiApiKey } from "@/lib/geminiClient";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import { fetchAI } from "@/lib/aiService";
 
 type Message = {
   id: string;
@@ -76,18 +76,28 @@ export function LearningAssistant() {
     setIsLoading(true);
     
     try {
-      // Generate learning-focused prompt
+      // Generate learning-focused prompt with improved instructions
       const prompt = `As LoopBot, a friendly and helpful learning assistant, please respond to this question about learning or education: "${messageText}"
       
-      Keep your response concise (under 150 words), friendly, and focused on helping the person learn. If you don't know something, suggest resources they could check.
+      Keep your response friendly, detailed, and focused on helping the person learn effectively. If you don't know something, suggest resources they could check.
       
       If they're asking about learning a topic:
-      1. Suggest a good starting point
-      2. Mention one resource they could use
-      3. Add one quick tip for effective learning`;
+      1. Suggest a good starting point with specific details
+      2. Mention 2-3 high-quality resources they could use (books, courses, websites)
+      3. Add 2-3 practical tips for effective learning in this area
+      4. If relevant, suggest a learning path or progression
       
-      const apiKey = getGeminiApiKey();
-      const response = await fetchGemini(prompt, apiKey);
+      Make your response engaging, informative, and actionable. Use examples where appropriate and be conversational in tone.`;
+      
+      // Try to use the unified AI service first for better fallback handling
+      let response;
+      try {
+        response = await fetchAI(prompt);
+      } catch (aiError) {
+        console.warn("Unified AI service failed, falling back to direct Gemini:", aiError);
+        const apiKey = getGeminiApiKey();
+        response = await fetchGemini(prompt, apiKey);
+      }
       
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),

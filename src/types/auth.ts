@@ -1,4 +1,3 @@
-
 export interface UserProgress {
   moduleId: number;
   progress: number;
@@ -9,6 +8,7 @@ export interface UserProfile {
   bio?: string;
   avatar?: string;
   goal?: string;
+  learningStyle?: "visual" | "auditory" | "reading" | "kinesthetic" | null;
   notifications?: {
     email: boolean;
     push: boolean;

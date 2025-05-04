@@ -96,19 +96,6 @@ export function Navbar({
             </Button>
           )}
           
-          {/* Remove Duplicates Button - Mobile */}
-          {variant === "home" && removeDuplicates && (
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="sm:hidden glass-btn-strong text-zinc-700 dark:text-white"
-              onClick={removeDuplicates}
-              title="Remove duplicate items"
-            >
-              <Copy className="h-5 w-5" />
-            </Button>
-          )}
-          
           {/* Notification Bell */}
           {variant === "home" && (
             <Button variant="ghost" size="icon" className="relative glass-btn-strong text-zinc-700 dark:text-white">
@@ -119,18 +106,6 @@ export function Navbar({
           
           {/* Theme Toggle */}
           <ThemeToggle />
-          
-          {/* Remove Duplicates Button */}
-          {variant === "home" && removeDuplicates && (
-            <Button 
-              className="glass-btn-strong text-zinc-700 dark:text-white hidden sm:flex"
-              title="Remove duplicate items"
-              onClick={removeDuplicates}
-            >
-              <Copy className="h-4 w-4 mr-2" />
-              Remove Duplicates
-            </Button>
-          )}
           
           {/* Personalize Learning Button */}
           {variant === "home" && togglePersonalized && (
@@ -196,9 +171,9 @@ export function Navbar({
             </>
           ) : (
             <>
-              <Link to="/profile" className="hover:text-primary transition-colors">Profile</Link>
-              <Link to="/learning-dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
               <Link to="/" className="hover:text-primary transition-colors">Home</Link>
+              <Link to="/learning-dashboard" className="hover:text-primary transition-colors">Dashboard</Link>
+              <Link to="/profile" className="hover:text-primary transition-colors">Profile</Link>
             </>
           )}
         </div>

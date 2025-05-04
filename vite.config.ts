@@ -1,4 +1,3 @@
-
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -10,7 +9,11 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
     proxy: {
-      '/api/groq': 'http://localhost:4001',
+      '/api/groq': {
+        target: 'http://localhost:4001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/groq/, '/api/groq'),
+      },
     },
   },
   plugins: [

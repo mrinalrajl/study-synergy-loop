@@ -20,7 +20,8 @@ import ResourceHub from "./ResourceHub";
 import TopicRecommendations from "./TopicRecommendations";
 import { Leaderboard } from "./Leaderboard";
 import { CourseChat } from "./CourseChat";
-import { fetchGroq, useGroqStore } from "@/lib/groqClient";
+import { fetchAI } from "@/lib/aiService";
+import { processAIResponse, formatCourseRecommendations, createMarkup } from "@/utils/responseFormatter";
 
 // Learning durations for users to select
 const LEARNING_DURATIONS = [
@@ -195,13 +196,13 @@ export const PersonalizedLearning = () => {
     try {
       // AI Recommended Courses
       const prompt = `Suggest a personalized learning path and 4 recommended courses for the following user preferences.\n\nTopic: ${topic}\nLevel: ${level}\nDuration: ${duration}\nGoal: ${goal}\n\nFormat the response as a numbered list of course titles with a short description for each.`;
-      const aiText = await fetchGroq(prompt);
+      const aiText = await fetchAI(prompt);
       const lines = aiText.split(/\n|\r/).filter(Boolean).slice(0, 4);
       setAiRecommendations(lines.length ? lines : fallbackCourses);
 
       // Free Udemy Courses via Groq
       const udemyPrompt = `Suggest 4 free Udemy courses for learning ${topic}. For each, include: title, a short description, instructor, popularity (1-5 stars), and rating (1-5 stars). Format as a JSON array.`;
-      const udemyText = await fetchGroq(udemyPrompt);
+      const udemyText = await fetchAI(udemyPrompt);
       let udemyList = [];
       try {
         udemyList = JSON.parse(udemyText);
@@ -649,7 +650,7 @@ export const PersonalizedLearning = () => {
           <StudyScheduler />
         </div>
         <div className="col-span-1">
-          <Quiz />
+          <Quiz initialTopic={topic || undefined} />
         </div>
         <div className="col-span-1">
           <StudyGroups />

@@ -15,7 +15,7 @@ import {
   getUserSkills,
   updateLearningStreak
 } from "@/lib/progress-tracker";
-import { fetchGemini } from "@/lib/geminiClient";
+import { fetchGroq } from "@/lib/groqClient";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Notes from "./Notes";
 import { Navbar } from "@/components/Navbar";
@@ -123,7 +123,7 @@ export const LearningDashboard = () => {
       
       Keep it under 2 sentences and make it motivational but specific to their situation.`;
       
-      const insight = await fetchGemini(prompt);
+      const insight = await fetchGroq(prompt);
       setAiInsight(insight);
     } catch (error) {
       console.error("Error generating AI insight:", error);

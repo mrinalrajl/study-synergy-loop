@@ -10,7 +10,8 @@ import { ChatSuggestions } from "@/components/ChatSuggestions";
 import { CourseRecommendations } from "@/components/CourseRecommendations";
 import { LEARNING_LEVELS, LEARNING_GOALS, COURSE_CATEGORIES } from "@/utils/courseData";
 import axios from "axios";
-import { fetchGroq, useGroqStore } from "@/lib/groqClient";
+import { fetchAI } from "@/lib/aiService";
+import { useGroqStore } from "@/lib/groqClient";
 import { GroqLoadingIndicator } from "@/components/GroqLoadingIndicator";
 
 const ONBOARDING_STEPS = [
@@ -169,7 +170,7 @@ Context:`;
       prompt += `\nLearning Goal: ${learningGoal}`;
     }
 
-    prompt += "\n\nPlease provide course recommendations and learning guidance based on this context.";
+    prompt += "\n\nPlease provide detailed course recommendations and comprehensive learning guidance based on this context. Make your response engaging, informative, and actionable with specific examples and clear structure.";
 
     return prompt;
   };

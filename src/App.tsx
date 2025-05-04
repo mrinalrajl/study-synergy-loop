@@ -14,6 +14,7 @@ import { UserProfile } from "./components/UserProfile";
 import LearningDashboard from "./components/LearningDashboard";
 import InputAnimationDemoPage from "./pages/InputAnimationDemoPage";
 import { GroqLoadingIndicator } from "./components/GroqLoadingIndicator";
+import PrismBackground from "./components/PrismBackground";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
       <TooltipProvider>
         <BrowserRouter>
           <AuthProvider>
+            <PrismBackground intensity="low" addBodyClass={true} />
             <Toaster />
             <Sonner />
             <AppRoutes />
