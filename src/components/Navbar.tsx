@@ -82,6 +82,9 @@ export function Navbar({
               <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
                 Dashboard
               </NavigationLink>
+              <NavigationLink to="/personalized-learning" icon={<LayoutDashboard size={18} />}>
+                Personalized Learning
+              </NavigationLink>
               <NavigationLink to="/profile" icon={<User size={18} />}>
                 Profile
               </NavigationLink>
@@ -93,6 +96,9 @@ export function Navbar({
               </NavigationLink>
               <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
                 Dashboard
+              </NavigationLink>
+              <NavigationLink to="/personalized-learning" icon={<LayoutDashboard size={18} />}>
+                Personalized Learning
               </NavigationLink>
               <NavigationLink to="/" icon={<Home size={18} />}>
                 Home
@@ -167,6 +173,8 @@ export function Navbar({
               <span className="hidden sm:inline font-medium">Sign out</span>
             </GlassButton>
           )}
+          
+          
         </div>
       </div>
       
