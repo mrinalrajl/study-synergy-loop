@@ -97,14 +97,19 @@ npm run groq:server
 ```
 
 ### API Endpoints
-```mermaid
-graph LR
-    A[Client] --> B[/api/groq]
-    B --> C[Course Recommendations]
-    B --> D[Learning Path Generation]
-    B --> E[Quiz Generation]
-    B --> F[Skill Assessment]
-```
+The Groq server exposes the following endpoint:
+
+| Endpoint | Method | Description |
+|----------|---------|-------------|
+| `/api/groq` | POST | Main endpoint for AI-powered features |
+
+The endpoint handles the following operations:
+- Course Recommendations
+- Learning Path Generation
+- Quiz Generation
+- Skill Assessment
+
+All requests require authentication via the Groq API key.
 
 The server will start on port 4001 by default. You can modify the port by setting the `PORT` environment variable.
 
