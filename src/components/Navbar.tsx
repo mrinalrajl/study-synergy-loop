@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GlassButton } from "@/components/ui/glass-button";
 import { NavigationLink } from "@/components/ui/navigation-link";
-import { BookUser, Bell, Search, LogOut, Menu, Home, LayoutDashboard, User } from "lucide-react";
+import { BookUser, Bell, Search, LogOut, Menu, Home, LayoutDashboard, User, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface NavbarProps {
@@ -79,11 +79,11 @@ export function Navbar({
               <NavigationLink to="/" active={variant === "home"} icon={<Home size={18} />}>
                 Home
               </NavigationLink>
+              <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
+                Courses
+              </NavigationLink>
               <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
                 Dashboard
-              </NavigationLink>
-              <NavigationLink to="/personalized-learning" icon={<LayoutDashboard size={18} />}>
-                Personalized Learning
               </NavigationLink>
               <NavigationLink to="/profile" icon={<User size={18} />}>
                 Profile
@@ -94,11 +94,11 @@ export function Navbar({
               <NavigationLink to="/profile" active={variant === "profile"} icon={<User size={18} />}>
                 Profile
               </NavigationLink>
+              <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
+                Courses
+              </NavigationLink>
               <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
                 Dashboard
-              </NavigationLink>
-              <NavigationLink to="/personalized-learning" icon={<LayoutDashboard size={18} />}>
-                Personalized Learning
               </NavigationLink>
               <NavigationLink to="/" icon={<Home size={18} />}>
                 Home
@@ -173,8 +173,6 @@ export function Navbar({
               <span className="hidden sm:inline font-medium">Sign out</span>
             </GlassButton>
           )}
-          
-          
         </div>
       </div>
       
@@ -203,6 +201,9 @@ export function Navbar({
                 <NavigationLink to="/" active={true} underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Home
                 </NavigationLink>
+                <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+                  Courses
+                </NavigationLink>
                 <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Dashboard
                 </NavigationLink>
@@ -214,6 +215,9 @@ export function Navbar({
               <>
                 <NavigationLink to="/" underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Home
+                </NavigationLink>
+                <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+                  Courses
                 </NavigationLink>
                 <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Dashboard

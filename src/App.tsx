@@ -18,6 +18,7 @@ import PrismBackground from "./components/PrismBackground";
 import { Loombot } from "./components/Loombot";
 import { useEffect } from "react";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import Courses from "./pages/Courses";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +65,11 @@ const AppRoutes = () => {
       <Route path="/learning-dashboard" element={
         <ProtectedRoute>
           <LearningDashboard />
+        </ProtectedRoute>
+      } />
+      <Route path="/courses" element={
+        <ProtectedRoute>
+          <Courses />
         </ProtectedRoute>
       } />
       <Route path="/input-animation-demo" element={<InputAnimationDemoPage />} />

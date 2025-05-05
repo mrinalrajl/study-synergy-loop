@@ -4,17 +4,15 @@ import { Bot, Send, X, MinusCircle, MaximizeIcon, Video, Sparkles } from "lucide
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { fetchAI, fetchYouTubeDetails } from "@/lib/aiService";
+import { fetchAI } from "@/lib/aiService";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 
-type QuizQA = { question: string; answer: string };
 type Message = {
   id: string;
-  text?: string;
+  text: string;
   sender: 'user' | 'bot';
   timestamp: Date;
   isVideo?: boolean;
-  quiz?: QuizQA[];
 };
 
 const QUICK_SUGGESTIONS = [
@@ -22,24 +20,8 @@ const QUICK_SUGGESTIONS = [
   "Summarize this Loom video",
   "Extract key points from video",
   "Generate quiz from this video",
+  "Recommend courses for me",
 ];
-
-const parseQuiz = (text: string): QuizQA[] => {
-  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-  const quiz: QuizQA[] = [];
-  let q = '';
-  for (let i = 0; i < lines.length; i++) {
-    if (/^Q\d+[:.]/i.test(lines[i])) {
-      q = lines[i].replace(/^Q\d+[:.]/i, '').trim();
-      if (lines[i+1] && /^A\d+[:.]/i.test(lines[i+1])) {
-        const a = lines[i+1].replace(/^A\d+[:.]/i, '').trim();
-        quiz.push({ question: q, answer: a });
-        i++;
-      }
-    }
-  }
-  return quiz;
-};
 
 export function Loombot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,6 +62,7 @@ export function Loombot() {
   };
 
   const isValidLoomUrl = (url: string): boolean => {
+    // Basic validation for Loom URLs
     return url.includes('loom.com') || url.includes('youtu') || url.includes('vimeo');
   };
 
@@ -95,8 +78,10 @@ export function Loombot() {
       return;
     }
     
+    // Store the video URL
     setVideoUrl(input);
     
+    // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
@@ -107,6 +92,7 @@ export function Loombot() {
     
     setMessages([...messages, userMessage]);
     
+    // Add bot response
     const botResponse: Message = {
       id: (Date.now() + 1).toString(),
       text: `I've analyzed this video. What would you like to know about it? You can ask me to summarize it, explain concepts, extract key points, or generate quiz questions.`,
@@ -123,13 +109,16 @@ export function Loombot() {
     
     if (!input.trim() && !e?.currentTarget) return;
     
+    // If triggered by suggestion click, use its text
     const messageText = typeof e?.currentTarget === 'string' ? e.currentTarget : input;
     
+    // Check if we have a video URL
     if (!videoUrl) {
       handleVideoUrlSubmit();
       return;
     }
     
+    // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
       text: messageText,
@@ -142,47 +131,30 @@ export function Loombot() {
     setIsLoading(true);
     
     try {
-      let videoDetails = null;
-      if (videoUrl.includes('youtu')) {
-        videoDetails = await fetchYouTubeDetails(videoUrl);
-      }
+      // Generate video-focused prompt
+      const prompt = `As Loombot, a friendly and helpful video learning assistant, please respond to this question about the video at ${videoUrl}: "${messageText}"
       
-      let prompt = "";
-      const isQuiz = /quiz|flash\s*card/i.test(messageText);
-      if (videoDetails) {
-        if (isQuiz) {
-          prompt = `Generate a quiz of 5 flash cards (Q&A pairs) based on this YouTube video.\nTitle: ${videoDetails.title}\nDescription: ${videoDetails.description}\nFormat: Q1: ...\nA1: ...\nQ2: ...\nA2: ...`;
-        } else {
-          prompt = `As Loombot, a friendly and helpful video learning assistant, here is the YouTube video info:\nTitle: ${videoDetails.title}\nDescription: ${videoDetails.description}\nUser question: ${messageText}\n\nGive a clear, detailed, and actionable answer based on the video info above.`;
-        }
-      } else {
-        if (isQuiz) {
-          prompt = `Generate a quiz of 5 flash cards (Q&A pairs) about the video at ${videoUrl}. Format: Q1: ...\nA1: ...\nQ2: ...\nA2: ...`;
-        } else {
-          prompt = `As Loombot, a friendly and helpful video learning assistant, please respond to this question about the video at ${videoUrl}: \"${messageText}\"`;
-        }
-      }
+      Keep your response friendly, detailed, and focused on helping the person learn from the video content. If you don't know something specific about the video, provide general guidance about the topic.
       
+      If they're asking about video content:
+      1. Provide a thoughtful analysis based on the likely content of the video
+      2. Suggest key concepts that might be covered in such a video
+      3. Add 2-3 practical tips for learning from video content
+      4. If relevant, suggest follow-up questions they could ask
+      
+      Make your response engaging, informative, and actionable. Be conversational in tone.`;
+      
+      // Use the unified AI service
       const response = await fetchAI(prompt);
       
-      if (isQuiz) {
-        const quiz = parseQuiz(response);
-        const quizMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          sender: "bot",
-          timestamp: new Date(),
-          quiz,
-        };
-        setMessages((prev: Message[]) => [...prev, quizMessage]);
-      } else {
-        const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          text: response || "I'm sorry, I couldn't generate a response about this video. Please try again.",
-          sender: "bot",
-          timestamp: new Date(),
-        };
-        setMessages((prev: Message[]) => [...prev, botMessage]);
-      }
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: response || "I'm sorry, I couldn't generate a response about this video. Please try again.",
+        sender: "bot",
+        timestamp: new Date(),
+      };
+      
+      setMessages((prev: Message[]) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error getting response:", error);
       toast({
@@ -236,6 +208,7 @@ export function Loombot() {
 
   return (
     <>
+      {/* Chat Button */}
       <AnimatePresence>
         {!isOpen && (
           <motion.button
@@ -252,6 +225,7 @@ export function Loombot() {
         )}
       </AnimatePresence>
 
+      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -260,6 +234,7 @@ export function Loombot() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
           >
+            {/* Header */}
             <div className="bg-purple-600 text-white p-3 flex items-center justify-between">
               <div className="flex items-center">
                 <Video className="w-5 h-5 mr-2" />
@@ -290,6 +265,7 @@ export function Loombot() {
               </div>
             </div>
 
+            {/* Body */}
             <AnimatePresence>
               {!isMinimized && (
                 <motion.div
@@ -298,42 +274,39 @@ export function Loombot() {
                   exit={{ height: 0 }}
                   className="bg-background border border-input rounded-b-lg"
                 >
+                  {/* Messages area */}
                   <div className="h-80 overflow-y-auto p-4" style={{ scrollBehavior: "smooth" }}>
                     {messages.map((message) => (
-                      message.quiz ? (
-                        <QuizFlashCards key={message.id} quiz={message.quiz} />
-                      ) : (
+                      <div
+                        key={message.id}
+                        className={`mb-3 max-w-[90%] ${
+                          message.sender === "user" ? "ml-auto" : "mr-auto"
+                        }`}
+                      >
                         <div
-                          key={message.id}
-                          className={`mb-3 max-w-[90%] ${
-                            message.sender === "user" ? "ml-auto" : "mr-auto"
+                          className={`p-2 rounded-lg shadow-sm ${
+                            message.sender === "user"
+                              ? "bg-purple-600 text-white ml-auto"
+                              : "bg-secondary/30 text-foreground"
                           }`}
                         >
-                          <div
-                            className={`p-2 rounded-lg shadow-sm ${
-                              message.sender === "user"
-                                ? "bg-purple-600 text-white ml-auto"
-                                : "bg-secondary/30 text-foreground"
-                            }`}
-                          >
-                            {message.isVideo ? (
-                              <div className="flex items-center">
-                                <Video className="w-4 h-4 mr-2" />
-                                <span>Video URL submitted</span>
-                              </div>
-                            ) : (
-                              message.text
-                            )}
-                          </div>
-                          <div
-                            className={`text-xs text-muted-foreground mt-1 ${
-                              message.sender === "user" ? "text-right" : ""
-                            }`}
-                          >
-                            {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
-                          </div>
+                          {message.isVideo ? (
+                            <div className="flex items-center">
+                              <Video className="w-4 h-4 mr-2" />
+                              <span>Video URL submitted</span>
+                            </div>
+                          ) : (
+                            message.text
+                          )}
                         </div>
-                      )
+                        <div
+                          className={`text-xs text-muted-foreground mt-1 ${
+                            message.sender === "user" ? "text-right" : ""
+                          }`}
+                        >
+                          {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
+                        </div>
+                      </div>
                     ))}
                     {isLoading && (
                       <div className="flex space-x-2 items-center p-2 bg-secondary/20 rounded-lg w-24">
@@ -345,6 +318,7 @@ export function Loombot() {
                     <div ref={messagesEndRef} />
                   </div>
 
+                  {/* Suggestions */}
                   {videoUrl && messages.length < 5 && (
                     <div className="px-4 mb-2">
                       <p className="text-xs text-muted-foreground mb-2">Try asking:</p>
@@ -362,6 +336,7 @@ export function Loombot() {
                     </div>
                   )}
 
+                  {/* Input area */}
                   <form onSubmit={handleSendMessage} className="border-t p-2 flex items-center">
                     <Input
                       value={input}
@@ -382,6 +357,7 @@ export function Loombot() {
                     </Button>
                   </form>
                   
+                  {/* Clear chat button */}
                   {messages.length > 1 && (
                     <div className="p-2 pt-0 text-center">
                       <button 
@@ -399,48 +375,5 @@ export function Loombot() {
         )}
       </AnimatePresence>
     </>
-  );
-}
-
-function QuizFlashCards({ quiz }: { quiz: QuizQA[] }) {
-  const parseOptions = (answer: string) => {
-    const match = answer.match(/Options?:\s*([a-dA-D][).][^\n]+(\s+[a-dA-D][).][^\n]+)*)/);
-    if (!match) return null;
-    const optionsStr = match[1];
-    return optionsStr.split(/(?=[a-dA-D][).])/).map(opt => opt.trim());
-  };
-  const [selected, setSelected] = useState<(string|null)[]>(Array(quiz.length).fill(null));
-  return (
-    <div className="my-4 space-y-6">
-      <div className="text-base font-semibold text-purple-700 dark:text-purple-300 mb-2">Quiz</div>
-      {quiz.map((qa, idx) => {
-        const options = parseOptions(qa.answer);
-        const answerText = options ? qa.answer.replace(/Options?:.+/i, '').trim() : qa.answer;
-        return (
-          <div key={idx} className="mb-4 p-4 rounded-lg bg-background border border-zinc-200 dark:border-zinc-700 shadow-sm">
-            <div className="font-medium mb-2">Q{idx+1}. {qa.question}</div>
-            {options ? (
-              <div className="space-y-2">
-                {options.map(opt => (
-                  <button
-                    key={opt}
-                    className={`block w-full text-left px-4 py-2 rounded border transition-colors ${selected[idx] === opt ? (opt.toLowerCase().includes(answerText.toLowerCase()) ? 'bg-green-100 border-green-400 text-green-800' : 'bg-red-100 border-red-400 text-red-800') : 'bg-white dark:bg-zinc-900 border-zinc-200 dark:border-zinc-700 hover:bg-purple-50 dark:hover:bg-zinc-800'}`}
-                    disabled={selected[idx] !== null}
-                    onClick={() => setSelected(sel => sel.map((s, i) => i === idx ? opt : s))}
-                  >{opt}</button>
-                ))}
-                {selected[idx] && (
-                  <div className={`mt-2 text-sm ${selected[idx]?.toLowerCase().includes(answerText.toLowerCase()) ? 'text-green-700' : 'text-red-700'}`}>
-                    {selected[idx]?.toLowerCase().includes(answerText.toLowerCase()) ? 'Correct!' : `Incorrect. Answer: ${answerText}`}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="mt-2 text-sm text-blue-800 dark:text-blue-200">Answer: {answerText}</div>
-            )}
-          </div>
-        );
-      })}
-    </div>
   );
 }
