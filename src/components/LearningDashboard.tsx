@@ -182,26 +182,11 @@ export const LearningDashboard = () => {
     <div className="min-h-screen flex flex-col relative font-prism">
       <PrismBackground />
       <Navbar variant="home" />
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 py-8 max-w-9xlxl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Learning Dashboard</h1>
-            <p className="text-muted-foreground">Track your progress and discover new courses</p>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="gap-1">
-              <Bell className="h-4 w-4" />
-              <span className="hidden md:inline">Notifications</span>
-            </Button>
-            <Button variant="outline" size="sm" className="gap-1">
-              <Bookmark className="h-4 w-4" />
-              <span className="hidden md:inline">Saved</span>
-            </Button>
-            <Button variant="outline" size="sm" className="gap-1">
-              <User className="h-4 w-4" />
-              <span className="hidden md:inline">Profile</span>
-            </Button>
+          <div className="flex-1">
+            <h1 className="text-3xl font-bold text-primary">Learning Dashboard</h1>
+            <p className="text-muted-foreground">Welcome back, Mrinal Raj</p>
           </div>
         </div>
 
