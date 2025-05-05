@@ -303,10 +303,7 @@ export function Loombot() {
                             message.sender === "user" ? "text-right" : ""
                           }`}
                         >
-                          {message.timestamp.toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
+                          {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                         </div>
                       </div>
                     ))}
