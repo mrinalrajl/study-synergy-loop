@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { GlassButton } from "@/components/ui/glass-button";
 import { NavigationLink } from "@/components/ui/navigation-link";
-import { BookUser, Bell, Search, LogOut, Menu, Home, LayoutDashboard, User } from "lucide-react";
+import { BookUser, Bell, Search, LogOut, Menu, Home, LayoutDashboard, User, BookOpen } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface NavbarProps {
@@ -57,7 +57,7 @@ export function Navbar({
         ? "bg-background/90 shadow-md border-b border-border/30" 
         : "bg-background/70 border-b border-border/10"
     }`}>
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4 sm:px-6 lg:px-8 py-5 lg:py-6">
+      <div className="w-full flex items-center justify-between px-4 sm:px-8 lg:px-12 py-5 lg:py-6">
         {/* Logo and Brand */}
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12 ring-2 ring-primary/20 ring-offset-2 ring-offset-background transition-all">
@@ -79,6 +79,9 @@ export function Navbar({
               <NavigationLink to="/" active={variant === "home"} icon={<Home size={18} />}>
                 Home
               </NavigationLink>
+              <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
+                Courses
+              </NavigationLink>
               <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
                 Dashboard
               </NavigationLink>
@@ -91,6 +94,9 @@ export function Navbar({
               <NavigationLink to="/profile" active={variant === "profile"} icon={<User size={18} />}>
                 Profile
               </NavigationLink>
+              <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
+                Courses
+              </NavigationLink>
               <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
                 Dashboard
               </NavigationLink>
@@ -101,10 +107,10 @@ export function Navbar({
           )}
         </div>
 
-        {/* Search Bar - Desktop */}
-        {variant === "home" && onSearchChange && (
-          <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-6">
-            <div className="relative w-full group">
+        {/* Center Section with Search Bar - Desktop */}
+        <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+          {variant === "home" && onSearchChange && (
+            <div className="relative w-full max-w-xl group">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <Input 
                 type="text" 
@@ -114,11 +120,11 @@ export function Navbar({
                 onChange={onSearchChange}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
         
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-5">
           {/* Mobile Menu Toggle */}
           <Button 
             variant="ghost" 
@@ -155,22 +161,6 @@ export function Navbar({
           
           {/* Theme Toggle */}
           <ThemeToggle />
-          
-          {/* User Profile */}
-          {user && (
-            <Link to="/profile" className="text-muted-foreground hover:text-foreground">
-              <GlassButton 
-                variant="ghost" 
-                size="icon" 
-                className="text-zinc-700 dark:text-white hover:bg-primary/10 transition-all"
-              >
-                <span className="sr-only">Profile</span>
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/80 to-secondary/80 text-white flex items-center justify-center font-medium shadow-md">
-                  {user?.name?.[0] || "U"}
-                </div>
-              </GlassButton>
-            </Link>
-          )}
           
           {/* Sign Out Button */}
           {logout && (
@@ -211,6 +201,9 @@ export function Navbar({
                 <NavigationLink to="/" active={true} underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Home
                 </NavigationLink>
+                <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+                  Courses
+                </NavigationLink>
                 <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Dashboard
                 </NavigationLink>
@@ -222,6 +215,9 @@ export function Navbar({
               <>
                 <NavigationLink to="/" underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Home
+                </NavigationLink>
+                <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+                  Courses
                 </NavigationLink>
                 <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
                   Dashboard

@@ -20,6 +20,7 @@ const QUICK_SUGGESTIONS = [
   "Summarize this Loom video",
   "Extract key points from video",
   "Generate quiz from this video",
+  "Recommend courses for me",
 ];
 
 export function Loombot() {
@@ -303,10 +304,7 @@ export function Loombot() {
                             message.sender === "user" ? "text-right" : ""
                           }`}
                         >
-                          {message.timestamp.toLocaleTimeString([], { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
-                          })}
+                          {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ''}
                         </div>
                       </div>
                     ))}

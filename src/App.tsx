@@ -17,6 +17,8 @@ import { GroqLoadingIndicator } from "./components/GroqLoadingIndicator";
 import PrismBackground from "./components/PrismBackground";
 import { Loombot } from "./components/Loombot";
 import { useEffect } from "react";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import Courses from "./pages/Courses";
 
 const queryClient = new QueryClient();
 
@@ -65,6 +67,11 @@ const AppRoutes = () => {
           <LearningDashboard />
         </ProtectedRoute>
       } />
+      <Route path="/courses" element={
+        <ProtectedRoute>
+          <Courses />
+        </ProtectedRoute>
+      } />
       <Route path="/input-animation-demo" element={<InputAnimationDemoPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
@@ -72,24 +79,26 @@ const AppRoutes = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <ThemeTransitionRoot />
-      <TooltipProvider>
-        <BrowserRouter>
-          <AuthProvider>
-            {/* Enhanced PrismBackground with medium intensity for better visual effect */}
-            <PrismBackground intensity="medium" addBodyClass={true} />
-            <Toaster />
-            <Sonner />
-            <AppRoutes />
-            <GroqLoadingIndicator variant="overlay" text="Groq is processing your request..." />
-            <Loombot />
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeTransitionRoot />
+        <TooltipProvider>
+          <BrowserRouter>
+            <AuthProvider>
+              {/* Enhanced PrismBackground with medium intensity for better visual effect */}
+              <PrismBackground />
+              <Toaster />
+              <Sonner />
+              <AppRoutes />
+              <GroqLoadingIndicator variant="overlay" text="Groq is processing your request..." />
+              <Loombot />
+            </AuthProvider>
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

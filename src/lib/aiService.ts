@@ -207,3 +207,51 @@ export function clearResponseCache(): void {
   responseCache.clear();
   console.log('AI response cache cleared');
 }
+
+/**
+ * Fetch YouTube video details using YouTube Data API v3 or Groq API fallback
+ * @param videoUrl The URL of the YouTube video
+ * @returns The video details (title and description) or null if not found
+ */
+export async function fetchYouTubeDetails(videoUrl: string): Promise<{ title: string; description: string } | null> {
+  try {
+    // Extract video ID from URL
+    const match = videoUrl.match(/[?&]v=([^&#]+)/) || videoUrl.match(/youtu\.be\/([^?&#]+)/);
+    const videoId = match ? match[1] : null;
+    if (!videoId) return null;
+
+    // Try YouTube Data API first
+    const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY || process.env.VITE_YOUTUBE_API_KEY;
+    if (apiKey) {
+      const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
+      const res = await fetch(apiUrl);
+      const data = await res.json();
+      if (data.items && data.items.length > 0) {
+        const snippet = data.items[0].snippet;
+        return { title: snippet.title, description: snippet.description };
+      }
+    }
+
+    // Fallback: Use Groq API to extract video details
+    const groqApiKey = import.meta.env.VITE_GROQ_API_KEY || process.env.VITE_GROQ_API_KEY;
+    if (groqApiKey) {
+      const groqRes = await fetch("/api/groq/youtube-details", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${groqApiKey}`,
+        },
+        body: JSON.stringify({ videoId }),
+      });
+      if (groqRes.ok) {
+        const groqData = await groqRes.json();
+        if (groqData.title && groqData.description) {
+          return { title: groqData.title, description: groqData.description };
+        }
+      }
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+}

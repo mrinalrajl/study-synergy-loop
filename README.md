@@ -119,6 +119,23 @@ The server will start on port 4001 by default. You can modify the port by settin
 - **CORS**: Enabled for cross-origin requests
 - **Authentication**: Requires Groq API key in environment variables
 
+## Project Documentation
+
+This project includes additional documentation files:
+
+### _prompts.pdf
+The `_prompts.pdf` file in the root directory contains examples of the AI prompts used to build various aspects of this project, including:
+- Course recommendation prompts
+- Learning path generation prompts
+- Quiz generation prompts
+
+### _planning.md
+The `_planning.md` file contains AI-generated non-code content used in the planning and development of this project, including:
+- System requirements and specifications
+- User personas and use cases
+- System architecture and design decisions
+- Feature specifications and acceptance criteria
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650e6add7a

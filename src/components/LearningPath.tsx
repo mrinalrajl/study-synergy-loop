@@ -1,4 +1,4 @@
-import { Trophy, Star, ArrowRight } from "lucide-react";
+import { Trophy, Star, ArrowRight, Youtube, ExternalLink } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -28,6 +28,73 @@ export const LearningPath = () => {
       return [];
     }
   });
+
+  // YouTube learning paths data
+  const youtubeLearningPaths = [
+    {
+      id: "yt1",
+      title: "Complete Web Development Bootcamp",
+      channelName: "Traversy Media",
+      description: "Learn full-stack web development from scratch with HTML, CSS, JavaScript, React, Node.js and more",
+      url: "https://www.youtube.com/c/TraversyMedia/playlists",
+      thumbnail: "https://i.ytimg.com/vi/UB1O30fR-EE/maxresdefault.jpg",
+      subscribers: "2.1M",
+      videoCount: 150,
+      category: "Web Development"
+    },
+    {
+      id: "yt2",
+      title: "Machine Learning Crash Course",
+      channelName: "freeCodeCamp.org",
+      description: "Learn the fundamentals of machine learning and AI with Python and TensorFlow",
+      url: "https://www.youtube.com/c/Freecodecamp/playlists",
+      thumbnail: "https://i.ytimg.com/vi/NWONeJKn6kc/maxresdefault.jpg",
+      subscribers: "7.5M",
+      videoCount: 200,
+      category: "Machine Learning"
+    },
+    {
+      id: "yt3",
+      title: "Data Structures and Algorithms",
+      channelName: "CS Dojo",
+      description: "Master data structures and algorithms with practical examples and coding challenges",
+      url: "https://www.youtube.com/c/CSDojo/playlists",
+      thumbnail: "https://i.ytimg.com/vi/bum_19loj9A/maxresdefault.jpg",
+      subscribers: "1.8M",
+      videoCount: 80,
+      category: "Computer Science"
+    },
+    {
+      id: "yt4",
+      title: "Mobile App Development with Flutter",
+      channelName: "The Net Ninja",
+      description: "Build cross-platform mobile apps with Flutter and Dart from beginner to advanced",
+      url: "https://www.youtube.com/c/TheNetNinja/playlists",
+      thumbnail: "https://i.ytimg.com/vi/1ukSR1GRtMU/maxresdefault.jpg",
+      subscribers: "950K",
+      videoCount: 120,
+      category: "Mobile Development"
+    }
+  ];
+  
+  // Track subscribed YouTube channels
+  const [subscribedChannels, setSubscribedChannels] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem("subscribed_channels") || "[]");
+    } catch {
+      return [];
+    }
+  });
+  
+  // Handle YouTube channel subscription
+  const handleSubscribe = (channelId: string) => {
+    if (!subscribedChannels.includes(channelId)) {
+      const updated = [...subscribedChannels, channelId];
+      setSubscribedChannels(updated);
+      localStorage.setItem("subscribed_channels", JSON.stringify(updated));
+      toast({ title: "Subscribed!", description: "YouTube channel added to your subscriptions." });
+    }
+  };
 
   // Initialize modules with user progress
   useEffect(() => {
