@@ -15,6 +15,7 @@ import LearningDashboard from "./components/LearningDashboard";
 import InputAnimationDemoPage from "./pages/InputAnimationDemoPage";
 import { GroqLoadingIndicator } from "./components/GroqLoadingIndicator";
 import PrismBackground from "./components/PrismBackground";
+import { Loombot } from "./components/Loombot";
 import { useEffect } from "react";
 
 const queryClient = new QueryClient();
@@ -83,6 +84,7 @@ const App = () => (
             <Sonner />
             <AppRoutes />
             <GroqLoadingIndicator variant="overlay" text="Groq is processing your request..." />
+            <Loombot />
           </AuthProvider>
         </BrowserRouter>
       </TooltipProvider>

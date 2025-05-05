@@ -2,6 +2,57 @@
 
 A modern learning platform with personalized AI-powered course recommendations, free course suggestions, and productivity tools.
 
+## 🔄 System Overview
+
+```mermaid
+graph TD
+    A[User Input] --> B[AI Service Layer]
+    B --> C[Groq API]
+    B --> D[Gemini API]
+    B --> E[Course Recommendations]
+    E --> F[Personalized Learning Path]
+    E --> G[Free Course Suggestions]
+    H[Learning Tools] --> I[Study Scheduler]
+    H --> J[Quiz System]
+    H --> K[Notes & Bookmarks]
+    L[Progress Tracking] --> M[Skills Assessment]
+    L --> N[Learning Analytics]
+    L --> O[Achievement System]
+```
+
+## 🎯 Core Features
+
+### Learning Management
+- **Personalized Dashboard**: Track enrolled courses, completion rates, learning time, and acquired skills
+- **Progress Analytics**: Visual progress indicators and detailed learning statistics
+- **Skill Tracking**: Monitor and update skill levels as you learn
+
+### Study Tools
+- **Interactive Scheduler**: Plan study sessions and track learning streaks
+- **Quiz System**: Test knowledge with AI-generated quizzes
+- **Notes & Bookmarks**: Save and organize learning materials
+- **Study Groups**: Collaborate with other learners
+
+### AI Integration
+```mermaid
+sequenceDiagram
+    participant User
+    participant App
+    participant AIService
+    participant GroqAPI
+    
+    User->>App: Enter learning preferences
+    App->>AIService: Send preferences
+    AIService->>GroqAPI: Generate recommendations
+    GroqAPI-->>AIService: Return suggestions
+    AIService-->>App: Format responses
+    App-->>User: Display personalized path
+```
+
+### Learning Assistant
+- **LoopBot**: AI-powered chat assistant for instant help
+- **Course Suggestions**: Get relevant course recommendations
+
 ## ✨ AI-Powered Features (Groq)
 
 - **Personalized Learning Path:**
@@ -13,6 +64,19 @@ A modern learning platform with personalized AI-powered course recommendations, 
   - Groq AI suggests 4 free Udemy courses for your chosen topic.
   - Each course includes title, description, instructor, and star ratings for popularity and quality.
   - Stars are shown based on the AI's assessment of course popularity and rating.
+
+## 🔍 User Experience Flow
+
+```mermaid
+graph LR
+    A[Login] --> B[Dashboard]
+    B --> C[Set Preferences]
+    C --> D[Get AI Recommendations]
+    D --> E[Enroll in Courses]
+    E --> F[Track Progress]
+    F --> G[Complete Assessments]
+    G --> H[Update Skills]
+```
 
 ## Running the Groq Server
 
@@ -31,6 +95,21 @@ Run the Groq server using:
 ```sh
 npm run groq:server
 ```
+
+### API Endpoints
+The Groq server exposes the following endpoint:
+
+| Endpoint | Method | Description |
+|----------|---------|-------------|
+| `/api/groq` | POST | Main endpoint for AI-powered features |
+
+The endpoint handles the following operations:
+- Course Recommendations
+- Learning Path Generation
+- Quiz Generation
+- Skill Assessment
+
+All requests require authentication via the Groq API key.
 
 The server will start on port 4001 by default. You can modify the port by setting the `PORT` environment variable.
 
@@ -151,11 +230,11 @@ This web application provides a comprehensive platform for developers to create,
 
 ## Features
 
-* **Project Management**: Create and manage projects with ease, including setting up repositories, tracking progress, and collaborating with team members.
-* **Code Editor**: Write, edit, and debug code with a feature-rich code editor, including syntax highlighting, auto-completion, and code refactoring.
-* **Deployment**: Deploy projects to a variety of platforms, including cloud providers, containerization services, and more.
-* **Collaboration**: Invite team members to collaborate on projects, with features like real-time commenting, @mentions, and task assignment.
-* **Version Control**: Manage code changes with a built-in version control system, including commit history, branching, and merging.
+- **Project Management**: Create and manage projects with ease, including setting up repositories, tracking progress, and collaborating with team members.
+- **Code Editor**: Write, edit, and debug code with a feature-rich code editor, including syntax highlighting, auto-completion, and code refactoring.
+- **Deployment**: Deploy projects to a variety of platforms, including cloud providers, containerization services, and more.
+- **Collaboration**: Invite team members to collaborate on projects, with features like real-time commenting, @mentions, and task assignment.
+- **Version Control**: Manage code changes with a built-in version control system, including commit history, branching, and merging.
 
 ## Getting Started
 
@@ -187,12 +266,12 @@ The Dev Platform web application is licensed under the MIT License.
 
 This project is built with:
 
-* Vite
-* TypeScript
-* React
-* shadcn-ui
-* Tailwind CSS
-* Groq (for AI recommendations)
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+- Groq (for AI recommendations)
 
 Note that I've kept the same structure and some of the same content as the original README.md file, but rewritten it to focus on a web application for a Dev Platform. Let me know if you'd like me to make any changes!
 ```
