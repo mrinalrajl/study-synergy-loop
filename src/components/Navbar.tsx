@@ -156,22 +156,6 @@ export function Navbar({
           {/* Theme Toggle */}
           <ThemeToggle />
           
-          {/* User Profile */}
-          {user && (
-            <Link to="/profile" className="text-muted-foreground hover:text-foreground">
-              <GlassButton 
-                variant="ghost" 
-                size="icon" 
-                className="text-zinc-700 dark:text-white hover:bg-primary/10 transition-all"
-              >
-                <span className="sr-only">Profile</span>
-                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary/80 to-secondary/80 text-white flex items-center justify-center font-medium shadow-md">
-                  {user?.name?.[0] || "U"}
-                </div>
-              </GlassButton>
-            </Link>
-          )}
-          
           {/* Sign Out Button */}
           {logout && (
             <GlassButton
@@ -181,18 +165,6 @@ export function Navbar({
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline font-medium">Sign out</span>
-            </GlassButton>
-          )}
-          
-          {/* Remove Duplicates Button (if applicable) */}
-          {removeDuplicates && (
-            <GlassButton
-              onClick={removeDuplicates}
-              className="hidden md:flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm"
-              title="Remove Duplicates"
-            >
-              <BookUser className="w-4 h-4" />
-              <span className="font-medium">Remove Duplicates</span>
             </GlassButton>
           )}
         </div>
