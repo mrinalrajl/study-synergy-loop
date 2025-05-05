@@ -57,7 +57,7 @@ export function Navbar({
         ? "bg-background/90 shadow-md border-b border-border/30" 
         : "bg-background/70 border-b border-border/10"
     }`}>
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4 sm:px-6 lg:px-8 py-5 lg:py-6">
+      <div className="w-full flex items-center justify-between px-4 sm:px-8 lg:px-12 py-5 lg:py-6">
         {/* Logo and Brand */}
         <div className="flex items-center gap-4">
           <Avatar className="h-12 w-12 ring-2 ring-primary/20 ring-offset-2 ring-offset-background transition-all">
@@ -101,10 +101,10 @@ export function Navbar({
           )}
         </div>
 
-        {/* Search Bar - Desktop */}
-        {variant === "home" && onSearchChange && (
-          <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-6">
-            <div className="relative w-full group">
+        {/* Center Section with Search Bar - Desktop */}
+        <div className="hidden md:flex items-center justify-center flex-1 mx-8">
+          {variant === "home" && onSearchChange && (
+            <div className="relative w-full max-w-xl group">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
               <Input 
                 type="text" 
@@ -114,11 +114,11 @@ export function Navbar({
                 onChange={onSearchChange}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
         
         {/* Action Buttons */}
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-5">
           {/* Mobile Menu Toggle */}
           <Button 
             variant="ghost" 
@@ -181,6 +181,18 @@ export function Navbar({
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline font-medium">Sign out</span>
+            </GlassButton>
+          )}
+          
+          {/* Remove Duplicates Button (if applicable) */}
+          {removeDuplicates && (
+            <GlassButton
+              onClick={removeDuplicates}
+              className="hidden md:flex items-center gap-2 text-muted-foreground hover:text-foreground text-sm"
+              title="Remove Duplicates"
+            >
+              <BookUser className="w-4 h-4" />
+              <span className="font-medium">Remove Duplicates</span>
             </GlassButton>
           )}
         </div>
