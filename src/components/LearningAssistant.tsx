@@ -227,12 +227,10 @@ export function LearningAssistant() {
                 >
                   {/* Messages area */}
                   <div className="h-80 overflow-y-auto p-4" style={{ scrollBehavior: "smooth" }}>
-                    {messages.map((message) => (
+                    {messages.map((message, idx) => (
                       <div
-                        key={message.id}
-                        className={`mb-3 max-w-[90%] ${
-                          message.sender === "user" ? "ml-auto" : "mr-auto"
-                        }`}
+                        key={idx}
+                        className={`flex flex-col ${message.sender === "user" ? "items-end" : "items-start"}`}
                       >
                         <div
                           className={`p-2 rounded-lg shadow-sm ${
@@ -248,10 +246,10 @@ export function LearningAssistant() {
                             message.sender === "user" ? "text-right" : ""
                           }`}
                         >
-                          {message.timestamp.toLocaleTimeString([], { 
+                          {message.timestamp ? new Date(message.timestamp).toLocaleTimeString([], { 
                             hour: '2-digit', 
                             minute: '2-digit' 
-                          })}
+                          }) : ''}
                         </div>
                       </div>
                     ))}
