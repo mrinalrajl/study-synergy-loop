@@ -81,7 +81,7 @@ const App = () => (
           <BrowserRouter>
             <AuthProvider>
               {/* Enhanced PrismBackground with medium intensity for better visual effect */}
-              <PrismBackground intensity="medium" addBodyClass={true} />
+              <PrismBackground />
               <Toaster />
               <Sonner />
               <AppRoutes />
