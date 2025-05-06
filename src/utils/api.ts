@@ -3,9 +3,10 @@
 /**
  * Base API URL that changes based on environment
  * In development: uses localhost
- * In production: uses the environment variable or falls back to localhost
+ * In production: uses the environment variable or falls back to the deployed backend URL
  */
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.PROD ? 'https://your-vultr-server-ip-or-domain' : 'http://localhost:8080');
 
 /**
  * Send a prompt to the Groq API via our backend proxy

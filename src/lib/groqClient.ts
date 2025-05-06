@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
+import { API_BASE_URL } from '@/utils/api';
 
 interface GroqState {
   isLoading: boolean;
@@ -52,7 +53,7 @@ interface GroqConfig {
 }
 
 const DEFAULT_CONFIG: GroqConfig = {
-  baseUrl: '/api/groq',
+  baseUrl: `${API_BASE_URL}/api/groq`,
   maxRetries: 2,
   retryDelay: 1000,
   includeHistory: true,
@@ -146,7 +147,7 @@ export async function fetchGroq(prompt: string, config?: Partial<GroqConfig>): P
  */
 export async function checkGroqServerHealth(): Promise<boolean> {
   try {
-    const res = await fetch('/api/groq/health', {
+    const res = await fetch(`${API_BASE_URL}/api/groq/health`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -166,7 +167,7 @@ export async function fetchChatHistory(limit: number = 50): Promise<any[]> {
   const userId = useGroqStore.getState().userId;
   
   try {
-    const res = await fetch(`/api/chat/history/${userId}?limit=${limit}`, {
+    const res = await fetch(`${API_BASE_URL}/api/chat/history/${userId}?limit=${limit}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -191,7 +192,7 @@ export async function clearChatHistory(): Promise<boolean> {
   const userId = useGroqStore.getState().userId;
   
   try {
-    const res = await fetch(`/api/chat/history/${userId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/chat/history/${userId}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -223,7 +224,7 @@ export async function saveUserPreferences(preferences: {
   const userId = useGroqStore.getState().userId;
   
   try {
-    const res = await fetch('/api/user/preferences', {
+    const res = await fetch(`${API_BASE_URL}/api/user/preferences`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -247,7 +248,7 @@ export async function getUserPreferences(): Promise<any | null> {
   const userId = useGroqStore.getState().userId;
   
   try {
-    const res = await fetch(`/api/user/preferences/${userId}`, {
+    const res = await fetch(`${API_BASE_URL}/api/user/preferences/${userId}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
