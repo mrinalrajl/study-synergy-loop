@@ -136,13 +136,6 @@ The `_planning.md` file contains AI-generated non-code content used in the plann
 - System architecture and design decisions
 - Feature specifications and acceptance criteria
 
-### _planning.md
-The `_planning.md` file contains AI-generated non-code content used in the planning and development of this project, including:
-- System requirements and specifications
-- User personas and use cases
-- System architecture and design decisions
-- Feature specifications and acceptance criteria
-
 ## Project info
 
 **URL**: https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650e6add7a
