@@ -1,6 +1,7 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  functions = "netlify/functions"
   
 [build.environment]
   NODE_VERSION = "20"
@@ -9,4 +10,10 @@
 [[redirects]]
   from = "/*"
   to = "/index.html"
+  status = 200
+  
+# Redirect API requests to the Netlify function
+[[redirects]]
+  from = "/api/groq"
+  to = "/.netlify/functions/groq-proxy"
   status = 200

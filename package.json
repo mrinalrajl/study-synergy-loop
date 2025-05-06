@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "build:server": "tsc src/server/geminiProxy.ts --outDir dist/server && ren dist\\server\\geminiProxy.js geminiProxy.cjs",
     "start:server": "node dist/server/geminiProxy.cjs",
-    "groq:server": "tsx watch src/server/groqProxy.ts"
+    "groq:server": "tsx watch src/server/groqProxy.ts",
+    "build:netlify": "npm run build && cp -r netlify/functions dist/netlify/functions"
   },
   "dependencies": {
     "@google/genai": "^0.12.0",
