@@ -23,7 +23,7 @@ endobj
 endobj
 
 4 0 obj
-<< /Length 9000 >>
+<< /Length 15000 >>
 stream
 BT
 /F1 24 Tf
@@ -156,6 +156,150 @@ BT
 0 -12 Td
 (Format your response as JSON with "title" and "description" fields.) Tj
 
+/F1 16 Tf
+0 -30 Td
+(6. Quiz Generation Prompts) Tj
+/F2 10 Tf
+0 -20 Td
+(The Quiz component uses this prompt to generate educational quiz questions:) Tj
+/F2 9 Tf
+0 -15 Td
+(Generate ${count} multiple-choice quiz questions about "${topic}" with ${difficulty} difficulty level.) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(For each question, provide:) Tj
+0 -12 Td
+(1. The question text) Tj
+0 -12 Td
+(2. Four possible answer options) Tj
+0 -12 Td
+(3. The index of the correct answer (0-3)) Tj
+0 -12 Td
+(4. A brief explanation of why the answer is correct) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Format the response as a valid JSON array of objects with the following structure:) Tj
+0 -12 Td
+([) Tj
+0 -12 Td
+(  {) Tj
+0 -12 Td
+(    "question": "Question text here?",) Tj
+0 -12 Td
+(    "options": ["Option A", "Option B", "Option C", "Option D"],) Tj
+0 -12 Td
+(    "answer": 2,) Tj
+0 -12 Td
+(    "explanation": "Explanation of why Option C is correct.") Tj
+0 -12 Td
+(  },) Tj
+0 -12 Td
+(  ...) Tj
+0 -12 Td
+(]) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Make sure the questions are diverse and cover different aspects of the topic. The difficulty level should be appropriate for ${difficulty} learners.) Tj
+
+/F1 16 Tf
+0 -30 Td
+(7. Learning Style Assessment) Tj
+/F2 10 Tf
+0 -20 Td
+(The application includes a learning style assessment that helps personalize content recommendations:) Tj
+/F2 9 Tf
+0 -15 Td
+(Learning Style Categories:) Tj
+0 -12 Td
+(- Visual: Learns best through images, diagrams, and spatial understanding) Tj
+0 -12 Td
+(- Auditory: Learns best through listening and speaking) Tj
+0 -12 Td
+(- Reading: Learns best through text-based materials) Tj
+0 -12 Td
+(- Kinesthetic: Learns best through hands-on experiences) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Based on the user's learning style assessment results, the AI can tailor recommendations using this context:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(The user has a ${learningStyle} learning style. Please recommend learning resources and approaches that would be most effective for this learning style. Focus on ${topic} and provide specific suggestions for how they can leverage their learning style strengths.) Tj
+
+/F1 16 Tf
+0 -30 Td
+(8. Personalized Learning Path Prompts) Tj
+/F2 10 Tf
+0 -20 Td
+(For generating personalized learning paths based on user goals and preferences:) Tj
+/F2 9 Tf
+0 -15 Td
+(Create a personalized learning path for a student with the following characteristics:) Tj
+0 -12 Td
+(- Current skill level: ${learningLevel}) Tj
+0 -12 Td
+(- Learning goal: ${learningGoal}) Tj
+0 -12 Td
+(- Learning style: ${learningStyle}) Tj
+0 -12 Td
+(- Available time commitment: ${timeCommitment} hours per week) Tj
+0 -12 Td
+(- Topic of interest: ${topic}) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(The learning path should include:) Tj
+0 -12 Td
+(1. A clear progression of concepts/skills to learn) Tj
+0 -12 Td
+(2. Estimated time to complete each stage) Tj
+0 -12 Td
+(3. Recommended resources for each stage (prioritize free resources when possible)) Tj
+0 -12 Td
+(4. Specific projects or exercises to reinforce learning) Tj
+0 -12 Td
+(5. Milestones to track progress) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Format the response in a clear, structured way with headings and bullet points for easy readability.) Tj
+
+/F1 16 Tf
+0 -30 Td
+(9. Study Group Formation Prompts) Tj
+/F2 10 Tf
+0 -20 Td
+(For suggesting optimal study group formations based on learning styles and goals:) Tj
+/F2 9 Tf
+0 -15 Td
+(Based on the following student profiles, suggest optimal study group formations of 3-4 students each:) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Student profiles:) Tj
+0 -12 Td
+(${studentProfiles}) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(For each suggested group:) Tj
+0 -12 Td
+(1. Explain why these students would work well together) Tj
+0 -12 Td
+(2. Suggest study activities that leverage their combined learning styles) Tj
+0 -12 Td
+(3. Recommend a study schedule and approach) Tj
+0 -12 Td
+(4. Identify potential challenges and how to address them) Tj
+0 -12 Td
+() Tj
+0 -12 Td
+(Aim to create balanced groups where students can complement each other's strengths and learning styles.) Tj
+
 ET
 endstream
 endobj
@@ -181,13 +325,13 @@ xref
 0000000065 00000 n
 0000000125 00000 n
 0000000280 00000 n
-0000009335 00000 n
-0000009410 00000 n
+0000015335 00000 n
+0000015410 00000 n
 
 trailer
 << /Size 7
    /Root 1 0 R
 >>
 startxref
-9480
+15480
 %%EOF
