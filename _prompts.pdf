@@ -1,0 +1,193 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog
+   /Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<< /Type /Pages
+   /Kids [3 0 R]
+   /Count 1
+>>
+endobj
+
+3 0 obj
+<< /Type /Page
+   /Parent 2 0 R
+   /MediaBox [0 0 612 792]
+   /Contents 4 0 R
+   /Resources << /Font << /F1 5 0 R /F2 6 0 R >>
+               >>
+>>
+endobj
+
+4 0 obj
+<< /Length 9000 >>
+stream
+BT
+/F1 24 Tf
+50 720 Td
+(Study Synergy Loop - AI Prompts) Tj
+/F1 12 Tf
+0 -40 Td
+(Examples of AI Prompts Used in the Project) Tj
+/F2 10 Tf
+0 -30 Td
+(This document contains examples of the prompts used to interact with AI models in the Study Synergy Loop application.) Tj
+
+/F1 16 Tf
+0 -40 Td
+(1. Learning Assistant Prompts) Tj
+/F2 10 Tf
+0 -20 Td
+(The following prompt is used in the LearningAssistant component to generate helpful responses:) Tj
+/F2 9 Tf
+0 -15 Td
+(As LoopBot, a friendly and helpful learning assistant, please respond to this question about learning or education: "${messageText}") Tj
+0 -12 Td
+(Keep your response friendly, detailed, and focused on helping the person learn effectively. If you don't know something, suggest resources they could check.) Tj
+0 -12 Td
+(If they're asking about learning a topic:) Tj
+0 -12 Td
+(1. Suggest a good starting point with specific details) Tj
+0 -12 Td
+(2. Mention 2-3 high-quality resources they could use (books, courses, websites)) Tj
+0 -12 Td
+(3. Add 2-3 practical tips for effective learning in this area) Tj
+0 -12 Td
+(4. If relevant, suggest a learning path or progression) Tj
+0 -12 Td
+(Make your response engaging, informative, and actionable. Use examples where appropriate and be conversational in tone.) Tj
+
+/F1 16 Tf
+0 -30 Td
+(2. Course Chat Prompts) Tj
+/F2 10 Tf
+0 -20 Td
+(The CourseChat component uses this personalized prompt to generate course recommendations:) Tj
+/F2 9 Tf
+0 -15 Td
+(You are an AI learning assistant specializing in personalized course recommendations.) Tj
+0 -12 Td
+(Current request: ${userMessage}) Tj
+0 -12 Td
+(Instructions:) Tj
+0 -12 Td
+(- Analyze the user's interests, goals, and current skill level) Tj
+0 -12 Td
+(- Provide specific course recommendations from our available categories: ${Object.keys(COURSE_CATEGORIES).join(", ")}) Tj
+0 -12 Td
+(- Include difficulty level, estimated time commitment, and learning outcomes) Tj
+0 -12 Td
+(- Suggest a learning path with related courses) Tj
+0 -12 Td
+(- Format your response in a clear, structured way) Tj
+0 -12 Td
+(- Keep responses focused and concise) Tj
+0 -12 Td
+(Context:) Tj
+0 -12 Td
+(Learning Level: ${learningLevel}) Tj
+0 -12 Td
+(Learning Goal: ${learningGoal}) Tj
+0 -12 Td
+(Please provide detailed course recommendations and comprehensive learning guidance based on this context. Make your response engaging, informative, and actionable with specific examples and clear structure.) Tj
+
+/F1 16 Tf
+0 -30 Td
+(3. AI Service Configuration) Tj
+/F2 10 Tf
+0 -20 Td
+(The application uses a unified AI service that can switch between Groq and Gemini:) Tj
+/F2 9 Tf
+0 -15 Td
+(Default configuration:) Tj
+0 -12 Td
+(- preferredService: 'groq' - Prefer Groq by default) Tj
+0 -12 Td
+(- enableFallback: true - Fall back to the other service if preferred fails) Tj
+0 -12 Td
+(- maxRetries: 3 - Number of retries before falling back) Tj
+0 -12 Td
+(- timeout: 30000 - Timeout in milliseconds) Tj
+0 -12 Td
+(- cacheResponses: true - Cache responses to improve responsiveness) Tj
+
+/F1 16 Tf
+0 -30 Td
+(4. Groq API Configuration) Tj
+/F2 10 Tf
+0 -20 Td
+(The server-side Groq proxy uses these parameters when calling the Groq API:) Tj
+/F2 9 Tf
+0 -15 Td
+(const chatCompletion = await groq.chat.completions.create({) Tj
+0 -12 Td
+(  messages: [{ role: "user", content: prompt }],) Tj
+0 -12 Td
+(  model: "compound-beta", // Updated to a supported model) Tj
+0 -12 Td
+(  temperature: 0.7,) Tj
+0 -12 Td
+(  max_tokens: 1024,) Tj
+0 -12 Td
+(  top_p: 1,) Tj
+0 -12 Td
+(  stream: false) Tj
+0 -12 Td
+(});) Tj
+
+/F1 16 Tf
+0 -30 Td
+(5. YouTube Learning Prompts) Tj
+/F2 10 Tf
+0 -20 Td
+(When extracting information from YouTube videos, the application can use this fallback prompt:) Tj
+/F2 9 Tf
+0 -15 Td
+(Given this YouTube video ID: ${videoId}, please extract and provide:) Tj
+0 -12 Td
+(1. The title of the video) Tj
+0 -12 Td
+(2. A concise description of the video content) Tj
+0 -12 Td
+(3. The main topics or concepts covered) Tj
+0 -12 Td
+(Format your response as JSON with "title" and "description" fields.) Tj
+
+ET
+endstream
+endobj
+
+5 0 obj
+<< /Type /Font
+   /Subtype /Type1
+   /BaseFont /Helvetica-Bold
+>>
+endobj
+
+6 0 obj
+<< /Type /Font
+   /Subtype /Type1
+   /BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 7
+0000000000 65535 f
+0000000010 00000 n
+0000000065 00000 n
+0000000125 00000 n
+0000000280 00000 n
+0000009335 00000 n
+0000009410 00000 n
+
+trailer
+<< /Size 7
+   /Root 1 0 R
+>>
+startxref
+9480
+%%EOF
