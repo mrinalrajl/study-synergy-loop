@@ -299,4 +299,11 @@ Note that I've kept the same structure and some of the same content as the origi
 
 ## About
 This project crafted with LoveableAI, Amazon Q, Groq Cloud. You can modify and extend it as needed for your own learning or development goals.
+```
+
+## Sign and Create Account
+https://github.com/user-attachments/assets/abfc168b-0710-40d0-8dd6-27bab21dd395 
+
+## Platform info 
+
 
