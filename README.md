@@ -144,9 +144,7 @@ The `_planning.md` file contains AI-generated non-code content used in the plann
 
 There are several ways of editing your application.
 
-**Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650e6add7a) and start prompting.
 
 Changes made via Lovable will be committed automatically to this repo.
 
@@ -196,9 +194,9 @@ This project is built with:
 - Tailwind CSS
 - Groq (for AI recommendations)
 
-## How can I deploy this project?
+## How did you deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650e6add7a) and click on Share -> Publish.
+Simply open [Netlify](https://luminous-bonbon-8f850c.netlify.app/) and click on import on existing github repo.
 
 ## I want to use a custom domain - is that possible?
 
