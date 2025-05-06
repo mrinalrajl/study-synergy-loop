@@ -119,26 +119,32 @@ The server will start on port 4001 by default. You can modify the port by settin
 - **CORS**: Enabled for cross-origin requests
 - **Authentication**: Requires Groq API key in environment variables
 
-## Project Documentation
+## 📸 Media
 
-This project includes additional documentation files:
+### Screenshots
 
-### _prompts.pdf
-The `_prompts.pdf` file in the root directory contains examples of the AI prompts used to build various aspects of this project, including:
-- Course recommendation prompts
-- Learning path generation prompts
-- Quiz generation prompts
+#### AI-Powered Learning
+![Groq AI Integration](Groq_AI.png)
+*The platform leverages Groq's AI capabilities for personalized learning recommendations*
 
-### _planning.md
-The `_planning.md` file contains AI-generated non-code content used in the planning and development of this project, including:
-- System requirements and specifications
-- User personas and use cases
-- System architecture and design decisions
-- Feature specifications and acceptance criteria
+#### Deployment Options
+![Vultr Deployment](Vultr.png)
+*Deploy your learning environment on Vultr cloud infrastructure*
 
-## Project info
+### Video Demos
 
-**URL**: https://lovable.dev/projects/f754e6a0-18e5-4312-a9d2-57650e6add7a
+#### Feature Overview
+<video width="100%" controls>
+  <source src="public/demos/feature-overview.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+
+#### AI Assistant Demo
+<video width="100%" controls>
+  <source src="public/demos/ai-assistant-demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## How can I edit this code?
 
@@ -293,3 +299,4 @@ Note that I've kept the same structure and some of the same content as the origi
 
 ## About
 This project crafted with LoveableAI, Amazon Q, Groq Cloud. You can modify and extend it as needed for your own learning or development goals.
+
