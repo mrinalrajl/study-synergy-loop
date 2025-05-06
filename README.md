@@ -53,32 +53,6 @@ sequenceDiagram
 - **LoopBot**: AI-powered chat assistant for instant help
 - **Course Suggestions**: Get relevant course recommendations
 
-## 📸 Media
-
-### Screenshots
-
-#### AI-Powered Learning
-![Groq AI Integration](Groq_AI.png)
-*The platform leverages Groq's AI capabilities for personalized learning recommendations*
-
-#### Deployment Options
-![Vultr Deployment](Vultr.png)
-*Deploy your learning environment on Vultr cloud infrastructure*
-
-### Video Demos
-
-#### Feature Overview
-<video width="100%" controls>
-  <source src="public/demos/feature-overview.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
-#### AI Assistant Demo
-<video width="100%" controls>
-  <source src="public/demos/ai-assistant-demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
 ## ✨ AI-Powered Features (Groq)
 
 - **Personalized Learning Path:**
@@ -145,4 +119,28 @@ The server will start on port 4001 by default. You can modify the port by settin
 - **CORS**: Enabled for cross-origin requests
 - **Authentication**: Requires Groq API key in environment variables
 
-[Previous sections remain unchanged...]
+## 📸 Media
+
+### Screenshots
+
+#### AI-Powered Learning
+![Groq AI Integration](Groq_AI.png)
+*The platform leverages Groq's AI capabilities for personalized learning recommendations*
+
+#### Deployment Options
+![Vultr Deployment](Vultr.png)
+*Deploy your learning environment on Vultr cloud infrastructure*
+
+### Video Demos
+
+#### Feature Overview
+<video width="100%" controls>
+  <source src="public/demos/feature-overview.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+#### AI Assistant Demo
+<video width="100%" controls>
+  <source src="public/demos/ai-assistant-demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
