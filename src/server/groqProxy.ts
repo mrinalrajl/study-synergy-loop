@@ -6,7 +6,14 @@ import { Groq } from 'groq-sdk';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+// Configure CORS to accept requests from any origin during development
+// In production, you should specify your Netlify domain
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? [process.env.FRONTEND_URL || 'https://luminous-bonbon-8f850c.netlify.app/'] 
+    : '*',
+  credentials: true
+}));
 app.use(express.json());
 
 if (!process.env.GROQ_API_KEY) {
