@@ -4,8 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { AuthLayout } from "@/components/AuthLayout";
 import { AnimatedInput } from "@/components/ui/animated-input";
 import { Button } from "@/components/ui/button";
-import { Mail, LockKeyhole, Eye, EyeOff } from "lucide-react";
 import { PrismBackground } from "@/components/PrismBackground";
+import ShootingStars3D from "@/components/ShootingStars3D";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -29,6 +29,7 @@ const Login = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative font-prism">
       <PrismBackground />
+      <ShootingStars3D />
       <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login">
         <AuthLayout 
           title="Welcome back" 
