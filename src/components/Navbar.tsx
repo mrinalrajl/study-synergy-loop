@@ -74,37 +74,18 @@ export function Navbar({
         
         {/* Navigation Links - Desktop */}
         <div className="hidden md:flex gap-8 items-center text-lg font-semibold font-prism">
-          {variant === "home" ? (
-            <>
-              <NavigationLink to="/" active={variant === "home"} icon={<Home size={18} />}>
-                Home
-              </NavigationLink>
-              <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
-                Courses
-              </NavigationLink>
-              <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
-                Dashboard
-              </NavigationLink>
-              <NavigationLink to="/profile" icon={<User size={18} />}>
-                Profile
-              </NavigationLink>
-            </>
-          ) : (
-            <>
-              <NavigationLink to="/profile" active={variant === "profile"} icon={<User size={18} />}>
-                Profile
-              </NavigationLink>
-              <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
-                Courses
-              </NavigationLink>
-              <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
-                Dashboard
-              </NavigationLink>
-              <NavigationLink to="/" icon={<Home size={18} />}>
-                Home
-              </NavigationLink>
-            </>
-          )}
+          <NavigationLink to="/" active={variant === "home"} icon={<Home size={18} />}>
+            Home
+          </NavigationLink>
+          <NavigationLink to="/courses" icon={<BookOpen size={18} />}>
+            Courses
+          </NavigationLink>
+          <NavigationLink to="/learning-dashboard" icon={<LayoutDashboard size={18} />}>
+            Dashboard
+          </NavigationLink>
+          <NavigationLink to="/profile" active={variant === "profile"} icon={<User size={18} />}>
+            Profile
+          </NavigationLink>
         </div>
 
         {/* Center Section with Search Bar - Desktop */}
@@ -196,37 +177,18 @@ export function Navbar({
       {mobileMenuOpen && (
         <div className="md:hidden bg-background/95 backdrop-blur-lg border-t border-primary/10 animate-fade-down shadow-lg">
           <div className="flex flex-col py-4 px-6 space-y-4">
-            {variant === "home" ? (
-              <>
-                <NavigationLink to="/" active={true} underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Home
-                </NavigationLink>
-                <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Courses
-                </NavigationLink>
-                <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Dashboard
-                </NavigationLink>
-                <NavigationLink to="/profile" underlineEffect={false} icon={<User size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Profile
-                </NavigationLink>
-              </>
-            ) : (
-              <>
-                <NavigationLink to="/" underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Home
-                </NavigationLink>
-                <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Courses
-                </NavigationLink>
-                <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Dashboard
-                </NavigationLink>
-                <NavigationLink to="/profile" active={true} underlineEffect={false} icon={<User size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
-                  Profile
-                </NavigationLink>
-              </>
-            )}
+            <NavigationLink to="/" active={variant === "home"} underlineEffect={false} icon={<Home size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+              Home
+            </NavigationLink>
+            <NavigationLink to="/courses" underlineEffect={false} icon={<BookOpen size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+              Courses
+            </NavigationLink>
+            <NavigationLink to="/learning-dashboard" underlineEffect={false} icon={<LayoutDashboard size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+              Dashboard
+            </NavigationLink>
+            <NavigationLink to="/profile" active={variant === "profile"} underlineEffect={false} icon={<User size={18} />} className="py-3 px-4 hover:bg-primary/10 rounded-lg">
+              Profile
+            </NavigationLink>
           </div>
         </div>
       )}
