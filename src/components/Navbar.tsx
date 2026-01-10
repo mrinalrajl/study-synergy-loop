@@ -139,13 +139,13 @@ export function Navbar({
         </div>
         
         {/* More Button */}
-        <button className="ios-nav-button" title="More options">
+        {/* <button className="ios-nav-button" title="More options">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <circle cx="12" cy="6" r="1.5" fill="currentColor"/>
             <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
             <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
           </svg>
-        </button>
+        </button> */}
       </div>
       
       <style>{`

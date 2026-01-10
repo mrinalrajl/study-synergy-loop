@@ -98,10 +98,10 @@ const Login = () => {
             <div className="pt-4 animate-fade-in [animation-delay:1000ms]">
               <button
                 type="submit"
-                className="liquid-metal-button w-full h-14 text-lg font-semibold rounded-xl text-white disabled:opacity-60 disabled:cursor-not-allowed"
+                className="liquid-metal-button w-full h-14 text-lg font-semibold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isLoading}
               >
-                {isLoading ? "Signing in..." : "Sign in"}
+                <span className="relative z-10 text-white">{isLoading ? "Signing in..." : "Sign in"}</span>
               </button>
             </div>
 
