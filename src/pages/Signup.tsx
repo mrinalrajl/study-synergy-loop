@@ -5,8 +5,8 @@ import { AuthLayout } from "@/components/AuthLayout";
 import { AnimatedInput } from "@/components/ui/animated-input";
 import { Button } from "@/components/ui/button";
 import { Mail, LockKeyhole, Eye, EyeOff, User } from "lucide-react";
-import emailjs from "emailjs-com";
 import { useLocalStorage } from "@/hooks/use-local-storage";
+import ShootingStars3D from "@/components/ShootingStars3D";
 
 function PrismBackground() {
   useEffect(() => {
@@ -157,9 +157,10 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative font-prism">
+    <div className="fixed inset-0 flex items-center justify-center font-prism overflow-hidden">
       <PrismBackground />
-      <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login">
+      <ShootingStars3D />
+      <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login overflow-y-auto max-h-screen">
         <AuthLayout 
           title="Create account" 
           subtitle="Join us to start your learning journey"
@@ -240,13 +241,13 @@ const Signup = () => {
             </div>
 
             <div className="pt-4 animate-fade-in [animation-delay:1000ms]">
-              <Button
+              <button
                 type="submit"
-                className="w-full h-14 text-lg font-medium glass-btn-strong"
+                className="liquid-metal-button w-full h-14 text-lg font-semibold rounded-xl disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isLoading || passwordStrength.score < 3}
               >
-                {isLoading ? "Creating account..." : "Create account"}
-              </Button>
+                <span className="relative z-10 text-white">{isLoading ? "Creating account..." : "Create account"}</span>
+              </button>
             </div>
 
             <p className="text-center text-base text-muted-foreground animate-fade-in [animation-delay:1200ms]">

@@ -71,7 +71,7 @@ export function UserProfile() {
   return (
     <div className="min-h-screen flex flex-col relative">
       <Navbar variant="profile" />
-      <div className="flex flex-1 items-center justify-center pt-32 pb-16">
+      <div className="flex flex-1 items-center justify-center pt-24 pb-16">
         <Card className="w-full max-w-2xl mx-auto glass-container p-0 shadow-2xl border-none bg-white/80 backdrop-blur-xl animate-fade-in-up rounded-3xl transition-all duration-700">
           <CardHeader className="flex flex-col items-center gap-2 bg-white/70 rounded-t-3xl pt-12 pb-8 animate-fade-in">
             <Avatar className="h-32 w-32 mb-2 ring-4 ring-primary/30 shadow-lg transition-transform duration-500 hover:scale-110">

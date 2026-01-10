@@ -110,8 +110,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       setUser(mockUser);
       toast({
-        title: "Welcome back!",
-        description: "Successfully logged in.",
+        title: "✓ Welcome back!",
+        description: `Logged in as ${email}`,
       });
       navigate("/");
     } catch (error) {
@@ -160,8 +160,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       };
       setUser(newUser);
       toast({
-        title: "Welcome!",
-        description: "Your account has been created successfully.",
+        title: "✓ Account created!",
+        description: `Welcome ${name}! Your account is ready.`,
       });
       navigate("/");
     } catch (error) {
@@ -178,8 +178,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null);
     toast({
-      title: "Logged out",
-      description: "Successfully logged out.",
+      title: "✓ Logged out",
+      description: "See you next time!",
     });
     navigate("/login");
   };
