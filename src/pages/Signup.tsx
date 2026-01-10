@@ -157,10 +157,10 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center relative font-prism">
+    <div className="fixed inset-0 flex items-center justify-center font-prism overflow-hidden">
       <PrismBackground />
       <ShootingStars3D />
-      <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login">
+      <div className="w-full max-w-2xl mx-auto p-8 animate-ease-in-login overflow-y-auto max-h-screen">
         <AuthLayout 
           title="Create account" 
           subtitle="Join us to start your learning journey"
