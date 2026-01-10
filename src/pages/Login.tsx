@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { AuthLayout } from "@/components/AuthLayout";
 import { AnimatedInput } from "@/components/ui/animated-input";
 import { Button } from "@/components/ui/button";
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import { PrismBackground } from "@/components/PrismBackground";
 import ShootingStars3D from "@/components/ShootingStars3D";
 
@@ -39,7 +40,7 @@ const Login = () => {
             <div className="grid grid-cols-1 gap-6">
               <div className="relative animate-fade-in [animation-delay:400ms]">
                 <div className="absolute left-3 top-3 text-muted-foreground">
-                  <Mail size={18} />
+                  <HiOutlineMail size={18} />
                 </div>
                 <AnimatedInput
                   id="email"
@@ -56,7 +57,7 @@ const Login = () => {
 
               <div className="relative animate-fade-in [animation-delay:600ms]">
                 <div className="absolute left-3 top-3 text-muted-foreground">
-                  <LockKeyhole size={18} />
+                  <HiOutlineLockClosed size={18} />
                 </div>
                 <AnimatedInput
                   id="password"
@@ -73,7 +74,7 @@ const Login = () => {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <HiOutlineEyeOff size={18} /> : <HiOutlineEye size={18} />}
                 </button>
               </div>
             </div>
