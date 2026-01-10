@@ -125,7 +125,7 @@ const ShootingStars3D = () => {
   }, [enabled, density, speedMul, scaleMul]);
 
   const stars = useMemo(() => {
-    const letters = ['π', 'α', 'β'];
+    const letters = ['π', 'α', 'β', '+', '−', '×', '÷'];
     const count = Math.max(0, Math.min(80, Math.round(density)));
     return Array.from({ length: count }, (_, i) => ({
       id: i,
