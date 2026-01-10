@@ -96,13 +96,13 @@ const Login = () => {
             </div>
 
             <div className="pt-4 animate-fade-in [animation-delay:1000ms]">
-              <Button
+              <button
                 type="submit"
-                className="w-full h-14 text-lg font-medium glass-btn-strong"
+                className="liquid-metal-button w-full h-14 text-lg font-semibold rounded-xl text-white disabled:opacity-60 disabled:cursor-not-allowed"
                 disabled={isLoading}
               >
                 {isLoading ? "Signing in..." : "Sign in"}
-              </Button>
+              </button>
             </div>
 
             <p className="text-center text-base text-muted-foreground animate-fade-in [animation-delay:1200ms]">

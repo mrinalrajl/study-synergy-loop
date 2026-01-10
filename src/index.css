@@ -150,6 +150,123 @@
     z-index: 1;
   }
 
+  /* Premium Shine Button */
+  .shine-button {
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+  
+  .shine-button::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -100%;
+    width: 100%;
+    height: calc(100% + 4px);
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 25%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.1) 75%,
+      transparent 100%
+    );
+    transform: skewX(-20deg);
+    transition: left 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .shine-button:hover::before {
+    left: 100%;
+  }
+  
+  .shine-button:hover {
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6), 0 0 20px rgba(118, 75, 162, 0.4);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .shine-button:active {
+    transform: translateY(0);
+  }
+
+  /* Liquid Metal Button - Exact Replica */
+  .liquid-metal-button {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    background-size: 200% 200%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5);
+    animation: liquidFlow 4s ease-in-out infinite;
+  }
+  
+  .liquid-metal-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      rgba(255, 255, 255, 0.15) 60deg,
+      rgba(255, 255, 255, 0.3) 120deg,
+      rgba(255, 255, 255, 0.15) 180deg,
+      transparent 240deg
+    );
+    animation: rotate 3s linear infinite;
+  }
+  
+  .liquid-metal-button::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    border-radius: inherit;
+    z-index: 1;
+  }
+  
+  .liquid-metal-button > * {
+    position: relative;
+    z-index: 2;
+  }
+  
+  .liquid-metal-button:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 8px 30px rgba(0, 0, 0, 0.6),
+      0 0 40px rgba(255, 255, 255, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.6);
+  }
+  
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes liquidFlow {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
   /* Fade-in animation for elements */
   .animate-fade-in {
     animation: fadeIn 0.3s ease-out;
